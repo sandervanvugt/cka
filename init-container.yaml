@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-demo
+  labels: 
+    app: init-demo
+spec:
+  containers:
+  - name: demo-container
+    image: busybox
+    command: ['sh', '-c', 'sleep 3600']
+  initContainers:
+  - name: init-container
+    image: busybox
+    command: ['sh', '-c', 'sleep 30']

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: initpod
+spec:
+  containers:
+  - name: after-init
+    image: busybox
+    command: ['sh', '-c', 'echo its running! && sleep 3600'] 
+  initContainers:
+  - name: init-myservice
+    image: busybox
+    command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;'] 
