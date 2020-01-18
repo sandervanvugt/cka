@@ -1,0 +1,69 @@
+nmtui
+exit
+systemctl disable --now firewalld
+ssh worker1
+ssh worker2
+ssh worker3
+vim /etc/fstab
+yum install -y git
+git clone https://github.com/sandervanvugt/cka
+cd cka
+ls
+vim setup-docker.sh 
+./setup-docker.sh 
+vim setup-kubetools.sh 
+./setup-kubetools.sh 
+./counter.sh 10
+kubeadm init
+ls
+vim join-net.sh
+su - student
+usermod -aG wheel student
+su - student
+ls
+scp join-net worker1:/root
+scp join-net.sh worker1:/root
+scp join-net.sh worker2:/root
+scp join-net.sh worker3:/root
+ssh worker1
+kubectl get nodes
+history
+su - student
+./counter.sh 20
+vim ex1.yaml
+kubectl api-resources
+exit
+vim /etc/hosts
+vi /etc/hosts
+yum install -y vim; yum update -y
+systemctl status firewalld
+systemctl disable --now firewalld
+ppppppoweroff
+poweroff
+cd /etc/yum.repos.d/
+ls
+vim kubernetes.repo 
+yum repolist
+yum provides */etcdctl
+rpm -qa | grep etcd
+yum install -y etcd
+etcdctl -h
+etcdctl backup -h
+etcdctl snapshot -h
+etcdctl snapshot save -h
+etcdctl snapshot save --help
+ETCDCTL_API=3 etcdctl snapshot save --help
+ETCDCTL_API=3 etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key get / --prefix --keys-only
+ETCDCTL_API=3 etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key snapshot save /tmp/snapshot.db
+history
+ps aux | grep etcd
+history
+ETCDCTL_API=3 etcdctl -h
+cd
+history
+exit
+systemctl status kubelet
+exit
+cd /etc/kubernetes/manifests/
+ls
+exit

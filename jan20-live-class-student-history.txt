@@ -1,0 +1,254 @@
+# this is an unedited copy of the student history file used in the
+# live class I've done on Jan. 16/17 2020. Use at your own risk
+
+mkdir -p .kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+exit
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+cd .kube/
+ls -l
+cat config 
+kubectl get all
+kubectl get nodes
+cd
+kubectl get pods -n kube-system
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+kubectl get pods -n kube-system
+sysctl -a | grep bridge-nf-call-iptables
+exit
+kubectl get nodes
+ssh root@worker2
+ssh root@worker3
+kubectl get nodes
+exit
+cat /etc/hosts
+su -
+kubectl api-resources
+kubectl api-resources | less
+kubectl get ns 
+kubectl create namespace mynamespace
+kubectl create -h | less
+kubectl create namespace -h
+kubect get ns
+kubectl get ns
+kubectl explain pod
+kubectl explain pod.metadata
+git clone https://github.com/sandervanvugt/cka
+cd cka
+ls
+vim ex1.yaml
+kubectl create -f ex1.yaml 
+kubectl get pods
+kubectl get pods -n mynamespace
+kubectl get pods --all-namespaces
+kubectl completion bash > ~/.kube/completion.bash.inc
+history
+cat ex1.yaml 
+kubectl create deployment --image=busybox
+kubectl create deployment failin --image=busybox
+kubectl get pods
+vim exam.txt
+./counter.sh 10
+vim ex4.yaml
+kubectl create -f ex4.yaml 
+vim ex4.yaml
+kubectl create -f ex4.yaml 
+vim ex4.yaml
+kubectl create -f ex4.yaml 
+cat ex4.yaml 
+vim ex4.yaml 
+kubectl get pods
+kubectl describe pods myapp-pod
+cp ex4.yaml ex4b.yaml
+vim ex4b.yaml 
+kubectl create -f ex4b.yaml; kubectl get pods
+kubectl get pods
+ls
+cat ex1.yaml 
+kubectl create deploy nginx-ex5 --image=nginx --replicas=5
+kubectl run deploy nginx-ex5 --image=nginx --replicas=5
+kubectl create deploy nginx-ex5b --image=nginx 
+kubectl edit deploy nginx-ex5b
+kubectl get pods
+kubectl scale deployment nginx-ex5b --replicas=5
+kubectl run mydeploy --image busybox --command sleep 10000 --replicas 3 --dry-run -o yaml > mydep.yaml
+vim mydep.yaml 
+kubectl create -f mydep.yaml 
+vim mydep.yaml 
+kubectl get all --selector run=mydeploy
+kubectl delete deployment mydeploy
+history
+kubectl get nodes
+kubectl explain pod.spec | less
+kubectl explain pod.spec.volumes | less
+cd cka/
+ls
+cd ..
+git clone https://github.com/sandervanvugt/ckad
+cd ckad/
+ls
+vim pv.yaml 
+kubectl create -f pv.yaml 
+kubectl get pv
+vim pvc.yaml 
+kubectl create -f pvc.yaml 
+kubectl get pvc
+kubectl get pv
+vim pv-pod.yaml 
+kubectl explain pv.spec
+kubectl explain pv.spec.emptydir
+kubectl explain pod.spec.volumes.emptydir
+kubectl explain pod.spec.volumes.emptyDir
+kubectl explain pv.spec.emptyDir
+vim pv.yaml 
+kubectl create -f pv.yaml 
+vim pv.yaml
+kubectl get pv
+kubectl get pv pv-volume -o yaml > ex7.yaml
+vim ex7.yaml 
+kubectl create -f ex7.yaml 
+kubectl get pv emtpy-volume -o yaml
+kubectl explain persistentvolume.spec.persistentvolumereclaimpolicy
+kubectl explain persistentvolume.spec.persistentVolumeReclaimPolicy
+vim pv-pod.yaml 
+kubectl create secret generic ex8-secret --from-literal=userpw=s3crt3tPW
+kubectl get secret ex8-secret -o yaml
+cd ../cka
+ls
+cd ../ckad/
+ls 
+cd ../cka
+vim ex8-pod.yaml
+kubectl get pv
+kubectl get secret
+vim ex8-pod.yaml
+kubectl create -f ex8-pod.yaml 
+vim ex8-pod.yaml
+kubectl create -f ex8-pod.yaml 
+kubectl get pods
+kubectl exec -it secret-test-pod -- /bin/bash
+kubectl get secret
+kubectl get secret ex8-secret -o yaml
+./counter.sh 10
+kubectl get pods -n kube-system
+sudo docker ps
+sudo ps aux | grep etcd
+sudo find / -name "etcdctl"
+sudo etcdctl
+sudo yum provides etcdctl
+ping 8.8.8.8
+sudo -i
+source <(kubectl completion bash)
+kubectl -h | less
+kubectl cordon -h | less
+kubectl drain -h | less
+sudo yum install -y bash-completion
+source <(kubectl completion bash)
+kubectl get nodes
+kubectl cordon worker2.example.com
+kubectl get nodes
+kubectl uncordon worker2.example.com
+kubectl get nodes
+kubectl drain worker2.example.com
+exit
+source <(kubectl completion bash)
+echo "source <(kubectl completion bash)" >> > ~/.bashrc
+echo "source <(kubectl completion bash)" >>  ~/.bashrc
+exit
+cd ckad/
+./countdown 20
+grep busybox2 *
+vim busybox.yaml 
+kubectl create -f busybox.yaml
+exit
+kubectl get pods
+kubectl get svc
+kubectl exec -it busybox2 -- nslookup kubernetes
+cd cka
+ls
+vim pod-and-service-dns.yaml 
+kubectl create -f pod-and-service-dns.yaml 
+kubectl exec -it busybox22 -- nslookup default-subdomain
+kubectl exec -it busybox22 -- nslookup busybox-1
+kubectl get pods -n kube-system
+kubectl get service -n kube-system
+kubectl exec -it busybox22 -- cat /etc/resolv.conf
+kubectl -n kube-system describe pods coredns-6955765f44-4mg22 
+for p in $(kubectl get pods -n kube-system -l k8s-app=kube-dns -o name); do kubectl logs -n kube-system $p; done
+kubectl get svc -n kube-system
+kubectl get ep kube-dns -n kube-system
+kubectl get pods --show-labels --all-namespaces
+kubectl run busy22 --image busybox --restart Never; kubectl expose pod busy22 --name mysvc --port 80 --type ClusterIP; kubectl exec busy22 -- sh -c "mkdir -p /var/exam && nslookup busy22 > /var/exam/dnsnames.txt"
+kubectl exec busy22 -- sh -c "mkdir -p /var/exam && nslookup busy22 > /var/exam/dnsnames.txt"
+kubectl -it exec busy22 -- sh -c "mkdir -p /var/exam && nslookup busy22 > /var/exam/dnsnames.txt"
+kubectl get svc
+kubectl get pods
+kubectl -it exec busybox22 -- sh -c "mkdir -p /var/exam && nslookup busy22 > /var/exam/dnsnames.txt"
+kubectl -it exec busybox22 -- sh -c "mkdir -p /var/exam && nslookup busybox22 > /var/exam/dnsnames.txt"
+kubectl -it exec busybox22 -- nslookup busybox22
+kubectl get 
+kubectl -it exec busybox22 -- nslookup myapp-pod
+kubectl get sv
+kubectl -it exec busybox22 -- nslookup mysvc
+iptables -L
+sudo iptables -L
+ssh root@worker1
+kubectl get pods -n kube-system
+ssh root@worker3
+kubectl get pods -o wide
+./counter.sh 10
+git clone https://github.com/kubernetes-incubator/metrics-server.git
+kubectl create -f metrics-server/deploy/1.8+/
+kubectl get all -n kube-system
+kubectl top pods
+kubectl top pods --all-namespaces
+kubectl -n kube-system edit deployment metrics-server
+kubectl -n kube-system logs metric-server
+kubectl -n kube-system logs metrics-server-d98f494df-jhdht 
+kubectl top pods --all-namespaces
+ssh worker3
+kubectl get pods --all-namespaces
+kubectl top pods --all-namespaces
+kubectl delete pod/busy22
+kubectl top pods --all-namespaces
+cd
+vim .kube/config 
+sudo vim /etc/kubernetes/admin.conf 
+kubectl get pods -n kube-system
+su -i
+su -
+kubectl get pods -n kube-system
+kubectl -n kube-system delete pod metrics-server-d98f494df-jhdht 
+kubectl top pods --all-namespaces
+kubectl create deployment mydaemonset --image nginx -o yaml --dry-run > ds.yaml
+vim ds.yaml 
+kubectl api-resources | grep -i daemon
+vim ds.yaml 
+kubectl create -f ds.yaml 
+cd cka
+ls
+vim daemonset-fluentd.yaml 
+kubectl explain DaemonSet
+kubectl explain DaemonSet | less
+vim daemonset-fluentd.yaml 
+kubectl create -f daemonset-fluentd.yaml 
+kubectl get daemonset.apps/fluentd-elasticsearch
+kubectl get daemonset
+vim daemonset-fluentd.yaml 
+kubectl -n kube-system get daemonset fluentd-elasticsearch -o yaml | less
+history | grep edit
+kubectl -n kube-system edit deployment metrics-server
+history | grep delete
+kubectl -n kube-system delete pod metrics-server-5d7898476-nhlq7 
+kubectl top pods --all-namespaces
+kubectl -n kube-system edit deployment metrics-server
+kubectl top pods --all-namespaces
+kubectl top pods
+kubectl -n kube-system edit deployment metrics-server
+kubectl get pods -n kube-system
+kubectl -n kube-system exec -it metrics-server-5d7898476-465j7 -- /bin/sh
+kubectl -n kube-system exec -it metrics-server-5d7898476-465j7 -- /bin/bash
+kubectl -n kube-system exec -it metrics-server-5d7898476-465j7 -- bash
+history
+exit
