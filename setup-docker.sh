@@ -27,9 +27,10 @@ EOF
 
 cat >> /etc/hosts << EOF
 {
-  192.168.4.111 control.example.com control
-  192.168.4.112 worker1.example.com worker1
-  192.168.4.113 worker2.example.com worker2
+  192.168.4.110 control.example.com control
+  192.168.4.111 worker1.example.com worker1
+  192.168.4.112 worker2.example.com worker2
+  192.168.4.113 worker3.example.com worker3
 }
 EOF
 
@@ -39,19 +40,4 @@ systemctl daemon-reload
 systemctl restart docker
 systemctl enable docker
 
-if [[ $HOSTNAME = control.example.com ]]
-then
-  firewall-cmd --add-port 6443/tcp --permanent
-  firewall-cmd --add-port 2379-2380/tcp --permanent
-  firewall-cmd --add-port 10250/tcp --permanent
-  firewall-cmd --add-port 10251/tcp --permanent
-  firewall-cmd --add-port 10252/tcp --permanent
-fi
-
-if echo $HOSTNAME | grep worker
-then
-  firewall-cmd --add-port 10250/tcp --permanent
-  firewall-cmd --add-port 30000-32767/tcp --permanent
-fi
-
-systemctl restart firewalld
+systemctl disable --now firewalld
