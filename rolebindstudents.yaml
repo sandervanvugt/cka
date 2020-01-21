@@ -1,13 +1,13 @@
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: staff-role-binding
-  namespace: staff
+  name: students-role-binding
+  namespace: students
 subjects:
 - kind: User
   name: anna
   apiGroup: ""
 roleRef:
   kind: Role
-  name: staff
+  name: students
   apiGroup: ""
