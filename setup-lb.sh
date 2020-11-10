@@ -80,8 +80,8 @@ scp keepalived-control3.conf control3:/etc/keepalived/keepalived.conf
 
 ### rewriting haproxy.cfg with site specific IP addresses
 sed -i s/server\ control1\ 1.1.1.1\:6443\ check/server\ control1\ $CONTROL1_IP\:6443\ check/ haproxy.cfg
-sed -i s/server\ control1\ 1.1.1.2\:6443\ check/server\ control2\ $CONTROL2_IP\:6443\ check/ haproxy.cfg
-sed -i s/server\ control1\ 1.1.1.3\:6443\ check/server\ control3\ $CONTROL3_IP\:6443\ check/ haproxy.cfg
+sed -i s/server\ control2\ 1.1.1.2\:6443\ check/server\ control2\ $CONTROL2_IP\:6443\ check/ haproxy.cfg
+sed -i s/server\ control3\ 1.1.1.3\:6443\ check/server\ control3\ $CONTROL3_IP\:6443\ check/ haproxy.cfg
 
 # copy haproxy.cfg to destinations
 cp haproxy.cfg /etc/haproxy/
