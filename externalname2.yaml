@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: secure
+spec: {} 
+---
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: secnginx
+  labels:
+    my: app
+  namespace: secure
+spec:
+  containers:
+  - name: secnginx
+    image: nginx
+...
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: secnginx
+  labels:
+    my: app
+  namespace: secure
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    my: app
+...
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ex-service
+  namespace: default
+spec:
+  type: ExternalName
+  externalName: secnginx.service.svc.cluster.local
+  ports:
+  - port: 80
+...
