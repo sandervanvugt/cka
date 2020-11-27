@@ -1,0 +1,8 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysite
+  namespace: default
+spec: 
+  type: ExternalName
+  externalName: www.sandervanvugt.com
