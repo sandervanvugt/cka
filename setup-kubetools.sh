@@ -2,6 +2,11 @@
 # kubeadm installation instructions as on
 # https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
+if [ $(id -u) != 0 ]; then
+  echo "Please run as root or use sudo."
+  exit 1
+fi
+
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
