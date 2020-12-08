@@ -8,6 +8,18 @@ echo it requires the machine where you run it to have 6GB of RAM or more
 echo press Enter to continue
 read
 
+##########
+echo ########################################
+echo WARNING
+echo ########################################
+echo Nov 2020 - currently this script is NOT supported on Mac OS Big Sur
+echo I will communicate here one Apple/VMware have provided updates that make it work again
+echo
+echo Check the Setup Guide provided in this repository for alternative installations
+echo
+echo press Enter to continue
+read
+
 # setting MYOS variable
 MYOS=$(hostnamectl | awk '/Operating/ { print $3 }')
 OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')

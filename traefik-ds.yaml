@@ -19,8 +19,8 @@ spec:
       name: traefik-ingress-lb
   template:
     metadata:
-      labels: 
-        ks8-app: traefik-ingress-lb
+      labels:
+        k8s-app: traefik-ingress-lb
         name: traefik-ingress-lb
     spec:
       serviceAccountName: traefik-ingress-controller
