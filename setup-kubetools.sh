@@ -2,6 +2,11 @@
 # kubeadm installation instructions as on
 # https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
+if [ $(id -u) != 0 ]; then
+  echo "Please run as root or use sudo."
+  exit 1
+fi
+
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -16,9 +21,11 @@ EOF
 setenforce 0
 sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 
-# disable swap (assuming that the name is /dev/centos/swap
-sed -i 's/^\/dev\/mapper\/centos-swap/#\/dev\/mapper\/centos-swap/' /etc/fstab
-swapoff /dev/mapper/centos-swap
+# disable swap (assuming that the name is /dev/centos*/swap)
+for device in $(sed -e 's/#.*//' /etc/fstab | awk '$2 == "swap" { print $1 }' | grep ^/dev/); do
+    swapoff $device
+    sed -i -e "s,$device,#$device," /etc/fstab
+done
 
 yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 

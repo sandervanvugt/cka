@@ -2,6 +2,11 @@
 # script that runs 
 # https://kubernetes.io/docs/setup/production-environment/container-runtime
 
+if [ $(id -u) != 0 ]; then
+  echo "Please run as root or use sudo."
+  exit 1
+fi
+
 yum install -y vim yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
