@@ -16,17 +16,17 @@ MYOS=$(hostnamectl | awk '/Operating/ { print $3 }')
 OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')
 
 ##### CentOS 7 config
-if [ $MYOS = "centos" ]
+if [ $MYOS = "CentOS" ]
 then
 	echo RUNNING CENTOS CONFIG
 	cat <<EOF > /etc/yum.repos.d/kubernetes.repo
-	[kubernetes]
-	name=Kubernetes
-	baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-	enabled=1
-	gpgcheck=1
-	repo_gpgcheck=1
-	gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
 	# Set SELinux in permissive mode (effectively disabling it)
