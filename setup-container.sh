@@ -7,7 +7,7 @@ MYOS=$(hostnamectl | awk '/Operating/ { print $3 }')
 OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')
 
 ##### CentOS 7 config
-if [ $MYOS = "centos" ]
+if [ $MYOS = "CentOS" ]
 then
 	echo setting up CentOS 7 with Docker 
 	yum install -y vim yum-utils device-mapper-persistent-data lvm2
