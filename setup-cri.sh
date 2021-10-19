@@ -2,6 +2,14 @@
 # script that runs 
 # https://kubernetes.io/docs/setup/production-environment/container-runtime
 
+echo this script is now deprecated and provided for compatibility reasons only. 
+echo run setup-container.sh instead. 
+echo after running setup-container.sh, use setup-kubetools.sh to install the kubernetes tools
+echo this script will now stop
+echo use Ctrl-C to stop it now
+sleep 30
+exit
+
 yum install -y vim yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
