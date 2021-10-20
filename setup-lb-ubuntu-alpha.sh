@@ -13,10 +13,13 @@
 echo this script requires three nodes: control1 control2 and control3
 echo enter the IP address for control1
 read CONTROL1_IP
+export CONTROL1_IP=$CONTROL1_IP
 echo enter the IP address for control2
 read CONTROL2_IP
+export CONTROL2_IP=$CONTROL2_IP
 echo enter the IP address for control3
 read CONTROL3_IP
+export CONTROL3_IP=$CONTROL3_IP
 echo ##### READ ALL OF THIS BEFORE CONTINUING ######
 echo this script requires you to run setup-docker.sh and setup-kubetools.sh first
 echo this script is based on the NIC name ens33
@@ -39,9 +42,14 @@ do
 done
 
 # create /etc/hosts for all nodes
-echo $CONTROL1_IP control1 >> /etc/hosts
-echo $CONTROL2_IP control2 >> /etc/hosts
-echo $CONTROL3_IP control3 >> /etc/hosts
+sudo sh -c 'echo $CONTROL1_IP control1 >> /etc/hosts'
+sudo sh -c 'echo $CONTROL2_IP control2 >> /etc/hosts'
+sudo sh -c 'echo $CONTROL3_IP control3 >> /etc/hosts'
+
+cat /etc/hosts
+
+echo this is the main thing that goes wrong: if it does, manually edit /etc/hosts on all the nodes and run the rest of the script
+read
 
 # generating and distributing SSH keys
 ssh-keygen
@@ -50,20 +58,21 @@ ssh-copy-id control2
 ssh-copy-id control3
 
 # install required software
-yum install haproxy keepalived -y
-ssh control2 "yum install haproxy keepalived -y"
-ssh control3 "yum install haproxy keepalived -y"
+sudo apt install haproxy keepalived -y
+ssh control2 "sudo apt install haproxy keepalived -y"
+ssh control3 "sudo apt install haproxy keepalived -y"
 
-# copying /etc/hosts file
-scp /etc/hosts control2:/etc/
-scp /etc/hosts control3:/etc/
+scp /etc/hosts control2:/tmp && ssh -t control2 'sudo cp /tmp/hosts /etc/'
+scp /etc/hosts control3:/tmp && ssh -t control3 'sudo cp /tmp/hosts /etc/'
 
 # create keepalived config
 # change IP address to anything that works in your environment!
 chmod +x check_apiserver.sh
 cp check_apiserver.sh /etc/keepalived/
-scp check_apiserver.sh control2:/etc/keepalived/
-scp check_apiserver.sh control3:/etc/keepalived/
+
+
+scp check_apiserver.sh control2:/tmp && ssh -t control2 'sudo cp /tmp/check_apiserver.sh /etc/keepalived'
+scp check_apiserver.sh control3:/tmp && ssh -t control3 'sudo cp /tmp/check_apiserver.sh /etc/keepalived'
 
 #### creating site specific keepalived.conf file
 cp keepalived.conf keepalived-control2.conf
@@ -75,8 +84,8 @@ sed -i 's/priority 255/priority 254/' keepalived-control2.conf
 sed -i 's/priority 255/priority 253/' keepalived-control3.conf
 
 cp keepalived.conf /etc/keepalived/
-scp keepalived-control2.conf control2:/etc/keepalived/keepalived.conf
-scp keepalived-control3.conf control3:/etc/keepalived/keepalived.conf
+scp keepalived-control2.conf control2:/tmp && ssh -t control2 'sudo cp /tmp/keepalived-control2.conf /etc/keepalived/keepalived.conf'
+scp keepalived-control3.conf control3:/tmp && ssh -t control3 'sudo cp /tmp/keepalived-control3.conf /etc/keepalived/keepalived.conf'
 
 ### rewriting haproxy.cfg with site specific IP addresses
 sed -i s/server\ control1\ 1.1.1.1\:6443\ check/server\ control1\ $CONTROL1_IP\:6443\ check/ haproxy.cfg
@@ -85,8 +94,8 @@ sed -i s/server\ control3\ 1.1.1.3\:6443\ check/server\ control3\ $CONTROL3_IP\:
 
 # copy haproxy.cfg to destinations
 cp haproxy.cfg /etc/haproxy/
-scp haproxy.cfg control2:/etc/haproxy/
-scp haproxy.cfg control3:/etc/haproxy/
+scp haproxy.cfg control2:/tmp && ssh -t control2 'sudo cp /tmp/haproxy.cfg /etc/haproxy/'
+scp haproxy.cfg control3:/tmp && ssh -t control3 'sudo cp /tmp/haproxy.cfg /etc/haproxy/'
 
 # start and enable services
 systemctl enable keepalived --now
@@ -97,4 +106,4 @@ ssh control3 systemctl enable keepalived --now
 ssh control3 systemctl enable haproxy --now
 
 echo setup is now done, please verify
-echo control1 should run the virtual IP address 192.168.4.100
+echo the first node that started the services - normally control1 -  should run the virtual IP address 192.168.29.100
