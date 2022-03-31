@@ -5,7 +5,7 @@ metadata:
   name: nwp-nginx
   namespace: default
   labels: 
-    app: nginx
+    app: nwp-nginx
 spec:
   containers:
   - name: nwp-nginx
