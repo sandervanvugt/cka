@@ -1,0 +1,21 @@
+Assuming that you have previously installed containerd and kubetools, and have issues a failing kubeadm init
+
+ON ALL NODES
+1.      from ~/cka use git pull to update the git repo
+2.      sudo cp ~/cka/config.toml /etc/containerd/
+3.      sudo systemctl restart containerd
+4.      sudo kubeadm reset
+
+ON CONTROL
+1.      sudo kubeadm init
+2.      follow the instructions to create the .kube/config that are printed after successful kubeadm init
+3.      kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+4.      copy the kubeadm join command to run on the workers
+
+ON EACH WORKER
+1.      kubeadm join .... as instructed by the output of kubeadm init
+
+ON CONTROL
+1.      kubectl get nodes to verify the nodes are coming up and listed as ready
+2.      kubectl create deploy testnginx --image=nginx --replicas=3
+
