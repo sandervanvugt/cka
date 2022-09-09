@@ -71,7 +71,19 @@ then
 	sudo apt-get update && sudo apt-get install -y containerd
 	# Configure containerd
 	sudo mkdir -p /etc/containerd
-	containerd config default | sudo tee /etc/containerd/config.toml
+	cat <<- TOML | sudo tee /etc/containerd/config.toml
+version = 2
+[plugins]
+  [plugins."io.containerd.grpc.v1.cri"]
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+      discard_unpacked_layers = true
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+          runtime_type = "io.containerd.runc.v2"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+            SystemdCgroup = true
+	TOML
+
 	# Restart containerd
 	sudo systemctl restart containerd	
 fi
