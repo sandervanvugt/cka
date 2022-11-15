@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx-ssd
+  name: nginx-hdd
   labels: 
     env: test
 spec:
   containers:
-  - name: nginx-ssd
+  - name: nginx-hdd
     image: nginx
     imagePullPolicy: IfNotPresent
   tolerations:
   - key: "storage"
     operator: "Equals"
-    value: "ssd"
+    value: "hdd"
     effect: "NoSchedule"
