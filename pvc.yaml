@@ -3,6 +3,7 @@ apiVersion: v1
 metadata:
   name: pv-claim
 spec:
+  storageClassName: demo
   accessModes:
     - ReadWriteOnce
   resources:
