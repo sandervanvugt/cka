@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: morevol
+spec:
+  containers:
+  - name: centos1
+    image: centos:7
+    command:
+      - sleep
+      - "3600" 
+    volumeMounts:
+      - mountPath: /centos1
+        name: test
+  - name: centos2
+    image: centos:7
+    command:
+      - sleep
+      - "3600"
+    volumeMounts:
+      - mountPath: /centos2
+        name: test
+  volumes: 
+    - name: test
+      emptyDir: {}

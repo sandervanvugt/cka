@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: two-containers
+spec:
+
+  volumes:
+  - name: shared-data
+    emptyDir: {}
+
+  containers:
+
+  - name: nginx-container
+    image: nginx
+    volumeMounts:
+    - name: shared-data
+      mountPath: /usr/share/nginx/html
+
+  - name: busybox-container
+    image: busybox
+    volumeMounts:
+    - name: shared-data
+      mountPath: /messages
+    command: ["/bin/sh"]
+    args: ["-c", "echo hello from the cluster > /messages/index.html && sleep 600" ]
+
