@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: myvol
+ 
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: mystorageclass
+allowVolumeExpansion: true
+provisioner: kubernetes.io/no-provisioner
+ 
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: mystorageclass
+  hostPath:
+    path: /tmp/pv1
+ 
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvc
+  namespace: myvol
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  storageClassName: mystorageclass
+ 
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pv-pod
+  namespace: myvol
+spec:
+  containers:
+    - name: busybox
+      image: busybox
+      args:
+        - sleep
+        - "3600"
+      volumeMounts:
+      - mountPath: "/vol1"
+        name: myvolume
+  volumes:
+    - name: myvolume
+      persistentVolumeClaim:
+        claimName: mypvc
