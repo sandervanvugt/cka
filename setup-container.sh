@@ -2,9 +2,14 @@
 # script that runs 
 # https://kubernetes.io/docs/setup/production-environment/container-runtime
 
+# changes March 14 2023: introduced $PLATFORM to have this work on amd64 as well as arm64
+
 # setting MYOS variable
 MYOS=$(hostnamectl | awk '/Operating/ { print $3 }')
 OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')
+# beta: building in ARM support
+[ $(arch) = aarch64 ] && PLATFORM=arm64
+[ $(arch) = x86_64 ] && PLATFORM=amd64
 
 if [ $MYOS = "Ubuntu" ]
 then
@@ -36,8 +41,8 @@ then
 	sudo systemctl stop containerd
 	# cleanup old files from previous attempt if existing
 	[ -d bin ] && rm -rf bin
-	wget https://github.com/containerd/containerd/releases/download/v1.6.15/containerd-1.6.15-linux-amd64.tar.gz 
-	tar xvf containerd-1.6.15-linux-amd64.tar.gz
+	wget https://github.com/containerd/containerd/releases/download/v1.6.15/containerd-1.6.15-linux-${PLATFORM}.tar.gz 
+	tar xvf containerd-1.6.15-linux-${PLATFORM}.tar.gz
 	sudo mv bin/* /usr/bin/
 	# Configure containerd
 	sudo mkdir -p /etc/containerd
