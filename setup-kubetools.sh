@@ -33,7 +33,7 @@ EOF
 	sudo apt-mark hold kubelet kubeadm kubectl
 	swapoff -a
 	
-	sed -i 's/swap/#swap/' /etc/fstab
+	sed -i 's/\/swap/#\/swap/' /etc/fstab
 fi
 
 # Set iptables bridging
