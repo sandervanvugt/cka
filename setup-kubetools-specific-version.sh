@@ -42,5 +42,8 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl --system
 
+sudo crictl config --set \
+    runtime-endpoint=unix:///run/containerd/containerd.sock
+
 echo 'after initializing the control node, follow instructions and use kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml to install the calico plugin (control node only). On the worker nodes, use sudo kubeadm join ... to join'
 
