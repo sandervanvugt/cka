@@ -6,3 +6,4 @@ Make sure the virtual machines meet the following requirements
 *	2 vCPUs
 *	10 GB disk space
 *	No swap
+For instructions on how to set up Ubuntu Server 22.04, see the document "Installing Ubuntu 22-04" in this Git repository.
