@@ -1,4 +1,4 @@
-# files for my CKA online course
+This Git repository contains supporting files for my "Certified Kubernetes Administrator (CKA)" video course. It is also used in the "CKA Crash Course" that I'm teaching at learning.oreilly.com. 
 
 In this course you need to have your own lab environment. This lab environment should consist of 3 virtual machines, using Ubuntu LTS server 20.4 or later (22.4 is recommended)
 Make sure the virtual machines meet the following requirements
