@@ -8,3 +8,5 @@ Make sure the virtual machines meet the following requirements
 *	No swap
 For instructions on how to set up Ubuntu Server 22.04, see the document "Installing Ubuntu 22-04" in this Git repository.
 For information on getting started with VirtualBox, see this video: https://www.youtube.com/watch?v=4qwUHSaIJdY
+
+MAY 2023 NOTE: The Calico network plugin has been changing a lot lately. I recommend following the instructions at https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart to install the Calico network plugin. 
