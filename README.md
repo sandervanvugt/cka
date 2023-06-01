@@ -4,7 +4,7 @@ In this course you need to have your own lab environment. This lab environment s
 Make sure the virtual machines meet the following requirements
 *	2GB RAM
 *	2 vCPUs
-*	10 GB disk space
+*	20 GB disk space
 *	No swap
 For instructions on how to set up Ubuntu Server 22.04, see the document "Installing Ubuntu 22-04" in this Git repository.
 For information on getting started with VirtualBox, see this video: https://www.youtube.com/watch?v=4qwUHSaIJdY
