@@ -1,16 +1,17 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx-ssd
-  labels: 
+  name: tolerator
+  labels:
     env: test
 spec:
   containers:
-  - name: nginx-ssd
+  - name: nginx
     image: nginx
     imagePullPolicy: IfNotPresent
   tolerations:
-  - key: "storage"
+  - key: "example-key"
     operator: "Equal"
-    value: "ssd"
+    value: "value1"
     effect: "NoSchedule"
+
