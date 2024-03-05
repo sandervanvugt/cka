@@ -58,7 +58,10 @@ version = 2
             SystemdCgroup = true
 TOML
 
-        # Restart containerd
+
+wget https://github.com/opencontainers/runc/releases/download/v1.1.12/runc.amd64
+sudo install -m 755 runc.amd64 /usr/local/sbin/runc
+# Restart containerd
         wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
         sudo mv containerd.service /usr/lib/systemd/system/
         sudo systemctl daemon-reload
@@ -68,5 +71,3 @@ fi
 exit
 #### notes from history just in case
 
- wget https://github.com/opencontainers/runc/releases/download/v1.1.12/runc.amd64
-   install -m 755 runc.amd64 /usr/local/sbin/runc
