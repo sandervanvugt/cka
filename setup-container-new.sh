@@ -22,31 +22,31 @@ then
 	sudo modprobe overlay
 	sudo modprobe br_netfilter
 
-	# Setup required sysctl params, these persist across reboots.
-	cat <<- EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
-	net.bridge.bridge-nf-call-iptables  = 1
-	net.ipv4.ip_forward                 = 1
-	net.bridge.bridge-nf-call-ip6tables = 1
-	EOF
+        # Setup required sysctl params, these persist across reboots.
+        cat <<- EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+        net.bridge.bridge-nf-call-iptables  = 1
+        net.ipv4.ip_forward                 = 1
+        net.bridge.bridge-nf-call-ip6tables = 1
+        EOF
 
-	# Apply sysctl params without reboot
-	sudo sysctl --system
+        # Apply sysctl params without reboot
+        sudo sysctl --system
 
-	# (Install containerd)
+        # (Install containerd)
 
-	#sudo apt-get update && sudo apt-get install -y containerd
-	# hopefully temporary bugfix as the containerd version provided in Ubu repo is tool old
-	# added Jan 26th 2023
-	# this needs to be updated when a recent enough containerd version will be in Ubuntu repos
-	 sudo systemctl stop containerd
-	 cleanup old files from previous attempt if existing
-	[ -d bin ] && rm -rf bin
-	wget https://github.com/containerd/containerd/releases/download/v1.7.13/containerd-1.7.13-linux-${PLATFORM}.tar.gz 
-	tar xvf containerd-1.7.13-linux-${PLATFORM}.tar.gz
-	sudo mv bin/* /usr/bin/
-	# Configure containerd
-	sudo mkdir -p /etc/containerd
-	cat <<- TOML | sudo tee /etc/containerd/config.toml
+        #sudo apt-get update && sudo apt-get install -y containerd
+        # hopefully temporary bugfix as the containerd version provided in Ubu repo is tool old
+        # added Jan 26th 2023
+        # this needs to be updated when a recent enough containerd version will be in Ubuntu repos
+         sudo systemctl stop containerd
+         cleanup old files from previous attempt if existing
+        [ -d bin ] && rm -rf bin
+        wget https://github.com/containerd/containerd/releases/download/v1.7.13/containerd-1.7.13-linux-${PLATFORM}.tar.gz
+        tar xvf containerd-1.7.13-linux-${PLATFORM}.tar.gz
+        sudo mv bin/* /usr/bin/
+        # Configure containerd
+        sudo mkdir -p /etc/containerd
+        cat <<- TOML | sudo tee /etc/containerd/config.toml
 version = 2
 [plugins]
   [plugins."io.containerd.grpc.v1.cri"]
@@ -57,9 +57,17 @@ version = 2
           runtime_type = "io.containerd.runc.v2"
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
             SystemdCgroup = true
-	TOML
+        TOML
 
-	# Restart containerd
-	sudo systemctl restart containerd	
+        # Restart containerd
+        wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
+        mv containerd.service /usr/lib/systemd/system/
+        systemctl daemon-reload
+        systemctl enable --now containerd
 fi
 
+exit
+#### notes from history just in case
+
+ wget https://github.com/opencontainers/runc/releases/download/v1.1.12/runc.amd64
+   install -m 755 runc.amd64 /usr/local/sbin/runc
