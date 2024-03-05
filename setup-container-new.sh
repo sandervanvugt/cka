@@ -42,7 +42,7 @@ EOF
          cleanup old files from previous attempt if existing
         [ -d bin ] && rm -rf bin
         wget https://github.com/containerd/containerd/releases/download/v1.7.13/containerd-1.7.13-linux-${PLATFORM}.tar.gz
-        tar xvf containerd-1.7.13-linux-${PLATFORM}.tar.gz -C /usr/local/bin
+        sudo tar xvf containerd-1.7.13-linux-${PLATFORM}.tar.gz -C /usr/local
         # Configure containerd
         sudo mkdir -p /etc/containerd
         cat <<- TOML | sudo tee /etc/containerd/config.toml
