@@ -17,7 +17,7 @@ then
 	cat <<- EOF | sudo tee /etc/modules-load.d/containerd.conf
 	overlay
 	br_netfilter
-	EOF
+EOF
 
 	sudo modprobe overlay
 	sudo modprobe br_netfilter
@@ -27,7 +27,7 @@ then
         net.bridge.bridge-nf-call-iptables  = 1
         net.ipv4.ip_forward                 = 1
         net.bridge.bridge-nf-call-ip6tables = 1
-        EOF
+EOF
 
         # Apply sysctl params without reboot
         sudo sysctl --system
@@ -61,9 +61,9 @@ version = 2
 
         # Restart containerd
         wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
-        mv containerd.service /usr/lib/systemd/system/
-        systemctl daemon-reload
-        systemctl enable --now containerd
+        sudo mv containerd.service /usr/lib/systemd/system/
+        sudo systemctl daemon-reload
+        sudo systemctl enable --now containerd
 fi
 
 exit
