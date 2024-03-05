@@ -42,8 +42,7 @@ EOF
          cleanup old files from previous attempt if existing
         [ -d bin ] && rm -rf bin
         wget https://github.com/containerd/containerd/releases/download/v1.7.13/containerd-1.7.13-linux-${PLATFORM}.tar.gz
-        tar xvf containerd-1.7.13-linux-${PLATFORM}.tar.gz
-        sudo mv bin/* /usr/bin/
+        tar xvf containerd-1.7.13-linux-${PLATFORM}.tar.gz -C /usr/local/bin
         # Configure containerd
         sudo mkdir -p /etc/containerd
         cat <<- TOML | sudo tee /etc/containerd/config.toml
@@ -57,7 +56,7 @@ version = 2
           runtime_type = "io.containerd.runc.v2"
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
             SystemdCgroup = true
-        TOML
+TOML
 
         # Restart containerd
         wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
