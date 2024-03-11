@@ -66,18 +66,5 @@ sudo install -m 755 runc.${PLATFORM} /usr/local/sbin/runc
         sudo systemctl enable --now containerd
 fi
 
+touch /tmp/container.txt
 exit
-#### notes from history just in case
-#!/bin/bash
-
-# Fetch the latest release tag from GitHub API
-LATEST_TAG=$(curl -s https://api.github.com/repos/opencontainers/runc/releases/latest | jq -r '.tag_name')
-
-# Construct the download URL
-DOWNLOAD_URL="https://github.com/opencontainers/runc/releases/download/${LATEST_TAG}/runc.amd64"
-
-# Use wget to download the latest version
-wget "$DOWNLOAD_URL"
-
-echo "Downloaded $DOWNLOAD_URL"
-

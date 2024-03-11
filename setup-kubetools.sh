@@ -11,6 +11,12 @@ then
 	exit 3
 fi
 
+if [ -z /tmp/container.txt ]
+then
+	echo run ./setup-containers.sh before running this script
+	exit 4
+fi
+
 # setting MYOS variable
 MYOS=$(hostnamectl | awk '/Operating/ { print $3 }')
 OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')
@@ -18,8 +24,6 @@ OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')
 # detecting latest Kubernetes version
 KUBEVERSION=$(curl -s https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r '.tag_name')
 KUBEVERSION=${KUBEVERSION%.*}
-
-echo "Latest Kubernetes version is: $latest_version"
 
 
 if [ $MYOS = "Ubuntu" ]
