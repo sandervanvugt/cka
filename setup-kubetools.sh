@@ -11,7 +11,7 @@ then
 	exit 3
 fi
 
-if [ -z /tmp/container.txt ]
+if ! [ -f /tmp/container.txt ]
 then
 	echo run ./setup-containers.sh before running this script
 	exit 4
