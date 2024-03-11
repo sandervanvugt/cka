@@ -5,15 +5,15 @@
 # this script supports Ubuntu 20.04 LTS and later only
 # run this script with sudo
 
-if ! [ $USER = root ]
-then
-	echo run this script with sudo
-	exit 3
-fi
+#if ! [ $USER = root ]
+#then
+#	echo run this script with sudo
+#	exit 3
+#fi
 
 if ! [ -f /tmp/container.txt ]
 then
-	echo run ./setup-containers.sh before running this script
+	echo run ./setup-container.sh before running this script
 	exit 4
 fi
 
@@ -33,12 +33,6 @@ then
 	br_netfilter
 EOF
 	
-### update 5-3-2024
-#	sudo apt-get update && sudo apt-get install -y apt-transport-https curl
-#	curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-#	cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
-#	deb https://apt.kubernetes.io/ kubernetes-xenial main
-#EOF
 	sudo apt-get update && sudo apt-get install -y apt-transport-https curl
 	curl -fsSL https://pkgs.k8s.io/core:/stable:/${KUBEVERSION}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 	echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KUBEVERSION}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -47,17 +41,17 @@ sleep 2
 	sudo apt-get update
 	sudo apt-get install -y kubelet kubeadm kubectl
 	sudo apt-mark hold kubelet kubeadm kubectl
-	swapoff -a
+	sudo swapoff -a
 	
-	sed -i 's/\/swap/#\/swap/' /etc/fstab
+	sudo sed -i 's/\/swap/#\/swap/' /etc/fstab
 fi
 
 # Set iptables bridging
-cat <<EOF >  /etc/sysctl.d/k8s.conf
+sudo cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 EOF
-sysctl --system
+sudo sysctl --system
 
 sudo crictl config --set \
     runtime-endpoint=unix:///run/containerd/containerd.sock
