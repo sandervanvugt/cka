@@ -22,17 +22,11 @@ then
 	br_netfilter
 EOF
 	
-### update 5-3-2024
 	sudo apt-get update && sudo apt-get install -y apt-transport-https curl
-	curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-	cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
-	deb https://apt.kubernetes.io/ kubernetes-xenial main
-EOF
-#	sudo apt-get update && sudo apt-get install -y apt-transport-https curl
-#	curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-#	echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+	curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+	echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-
+	sudo apt-get update
 	sudo apt-get install -y kubelet kubeadm kubectl
 	sudo apt-mark hold kubelet kubeadm kubectl
 	swapoff -a
@@ -49,4 +43,4 @@ sysctl --system
 
 sudo crictl config --set \
     runtime-endpoint=unix:///run/containerd/containerd.sock
-echo 'after initializing the control node, follow instructions and use kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml to install the calico plugin (control node only). On the worker nodes, use sudo kubeadm join ... to join'
+echo 'after initializing the control node, follow instructions and use kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml to install the calico plugin (control node only). On the worker nodes, use sudo kubeadm join ... to join'

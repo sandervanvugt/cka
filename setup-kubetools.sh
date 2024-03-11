@@ -15,6 +15,13 @@ fi
 MYOS=$(hostnamectl | awk '/Operating/ { print $3 }')
 OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')
 
+# detecting latest Kubernetes version
+KUBEVERSION=$(curl -s https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r '.tag_name')
+KUBEVERSION=${KUBEVERSION%.*}
+
+echo "Latest Kubernetes version is: $latest_version"
+
+
 if [ $MYOS = "Ubuntu" ]
 then
 	echo RUNNING UBUNTU CONFIG
@@ -29,8 +36,8 @@ EOF
 #	deb https://apt.kubernetes.io/ kubernetes-xenial main
 #EOF
 	sudo apt-get update && sudo apt-get install -y apt-transport-https curl
-	curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-	echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+	curl -fsSL https://pkgs.k8s.io/core:/stable:/${KUBEVERSION}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+	echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KUBEVERSION}/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 	sudo apt-get update
 	sudo apt-get install -y kubelet kubeadm kubectl
@@ -49,4 +56,4 @@ sysctl --system
 
 sudo crictl config --set \
     runtime-endpoint=unix:///run/containerd/containerd.sock
-echo 'after initializing the control node, follow instructions and use kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml to install the calico plugin (control node only). On the worker nodes, use sudo kubeadm join ... to join'
+echo 'after initializing the control node, follow instructions and use kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml to install the calico plugin (control node only). On the worker nodes, use sudo kubeadm join ... to join'
