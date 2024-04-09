@@ -63,3 +63,5 @@ version = 2
 	sudo systemctl restart containerd	
 fi
 
+touch /tmp/container.txt
+exit

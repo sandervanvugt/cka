@@ -64,6 +64,7 @@ sudo install -m 755 runc.${PLATFORM} /usr/local/sbin/runc
         sudo systemctl enable --now containerd
 fi
 
+touch /tmp/container.txt
 exit
 #### notes from history just in case
 #!/bin/bash
