@@ -58,8 +58,16 @@ version = 2
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
             SystemdCgroup = true
 	TOML
-
+	if ! [ -x /usr/sbin/apparmor_parser ]
+	then
+		## Fix for ubuntu 24.04 AppArmor issue where crun cannot delete container - Part of error:
+		## "unknown error after kill: runc did not terminate successfully: exit status 1: unable to signal init: permission denied\n: unknown"
+		sudo ln -s /etc/apparmor.d/runc /etc/apparmor.d/disable/
+		sudo apparmor_parser -R /etc/apparmor.d/runc
+	fi
+	
 	# Restart containerd
 	sudo systemctl restart containerd	
+	touch /tmp/container.txt
 fi
 
