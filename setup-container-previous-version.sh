@@ -63,3 +63,7 @@ version = 2
 	sudo systemctl restart containerd	
 fi
 
+sudo ln -s /etc/apparmor.d/runc /etc/apparmor.d/disable/
+sudo apparmor_parser -R /etc/apparmor.d/runc
+
+touch /tmp/container.txt

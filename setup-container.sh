@@ -66,5 +66,9 @@ sudo install -m 755 runc.${PLATFORM} /usr/local/sbin/runc
         sudo systemctl enable --now containerd
 fi
 
+sudo ln -s /etc/apparmor.d/runc /etc/apparmor.d/disable/
+sudo apparmor_parser -R /etc/apparmor.d/runc
+
+
 touch /tmp/container.txt
 exit
