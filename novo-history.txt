@@ -1,0 +1,462 @@
+    1  ping nu.nl
+    2  ip a
+    3  git
+    4  git clone https://github.com/sandervanvugt/cka
+    5  cd cka
+    6  ls *sh
+    7  vim setup-container-previous-version.sh 
+    8  ./setup-container-previous-version.sh 
+    9  history
+   10  ls *sh
+   11  ./setup-kubetools-previousversion.sh 
+   12  vim setup-container.sh 
+   13  touch /tmp/container.txt
+   14  ./setup-kubetools-previousversion.sh 
+   15  history
+   16  cat /etc/hosts
+   17  sudo kubeadm init
+   18  which kubeadm 
+   19  history
+   20  mkdir -p $HOME/.kube
+   21  kubectl get all
+   22  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   23  kubectl get pods -n kube-system
+   24  history
+   25  kubectl get nodes
+   26  kubeadm -h | less
+   27  kubeadm token -h | les
+   28  kubeadm token -h | less
+   29  kubeadm token list -h | less
+   30  sudo kubeadm token create --print-join-command
+   31  sudo kubeadm token list
+   32  history
+   33  kubectl -h | less
+   34  kubectl completion -h | less
+   35  source <(kubectl completion bash)
+   36  kubectl create -h | less
+   37  kubectl create deploy -h | less
+   38  kubectl create deployment novoapp --image=nginx --replicas=3
+   39  kubectl get all
+   40  kubectl delete pod novoapp-6c544c567c-46wgx 
+   41  kubectl get all
+   42  history
+   43  kubectl get all
+   44  kubectl describe pod novoapp-6c544c567c-46wgx 
+   45  kubectl run -h | less
+   46  kubectl run nginx --image=nginx
+   47  kubectl get all
+   48  kubectl delete pod nginx 
+   49  kubectl create deploy mydb --image=mariadb --replicas=3
+   50  kubectl get all
+   51  kubectl describe pod mydb-7d6458794-cwx4j 
+   52  kubectl get all
+   53  kubectl describe pod mydb-7d6458794-cwx4j 
+   54  kubectl logs mydb-7d6458794-rrtnf 
+   55  kubectl set env -h | less
+   56  kubectl set env deploy mydb MARIADB_ROOT_PASSWORD=password
+   57  kubectl get ll
+   58  kubectl get all
+   59  sudo systemctl status containerd
+   60  ps aux | grep nginx
+   61  sudo journalctl -u containerd
+   62  journalctl 
+   63  kubectl get pods
+   64  kubectl delete pod nginx --force --timeout=0
+   65  kubectl get all
+   66  kubectl delete pods novoapp-6c544c567c-46wgx --force --timeout=0
+   67  kubectl get pods
+   68  kubectl get pods -o wide
+   69  kubectl create deploy failure --image=nginx --replicas=3
+   70  kubectl get all
+   71  kubectl get all --show-labels
+   72  kubectl get all --selector app=failure
+   73  kubectl get all --selector app=failure -o wide
+   74  kubectl delete pod failure-7fdf677784-fnd27 
+   75  kubectl get all --selector app=failure -o wide
+   76  kubectl delete pod failure-7fdf677784-fnd27 --force --timeout=0
+   77  kubectl get all --selector app=failure -o wide
+   78  sudo ln -s /etc/apparmor.d/runc /etc/apparmor.d/disable/
+   79  sudo apparmor_parser -R /etc/apparmor.d/runc
+   80  kubectl get all --selector app=failure -o wide
+   81  curl 172.16.189.77
+   82  kubectl expose deployment failure --port=80
+   83  kubectl get all --selector app=failure -o wide
+   84  curl 10.107.127.87
+   85  kubectl edit svc failure 
+   86  kubectl get all --selector app=failure -o wide
+   87  kubectl edit svc failure 
+   88  kubectl describe svc failure 
+   89  kubectl edit svc failure 
+   90  kubectl describe svc failure 
+   91  vim exo1.txt
+   92  history
+   93  kubectl create deploy october --image=nginx --replicas=3
+   94  kubectl expose deploy october --type=NodePort --port=80
+   95  kubectl get all --selector app=october
+   96  kubectl describe svc october 
+   97  kubectl get pods -n kube-system
+   98  kubectl edit svc october 
+   99  kubectl get svc
+  100  kubectl edit svc october 
+  101  kubectl delete svc failure 
+  102  history
+  103  exit
+  104  kubectl run webserver --image=nginx
+  105  source <(kubectl completion bash)
+  106  kubectl expose pod webserver --port=80
+  107  kubectl run testpod --image=busybox -- sleep 3600
+  108  kubectl get svc
+  109  kubectl exec -it testpod -- wget webserver
+  110  kubectl exec -it testpod -- cat /etc/resolv.conf
+  111  kubectl get ns
+  112  kubectl get pods
+  113  kubectl get pods -n kube-system
+  114  kubectl get pods -A
+  115  kubectl create ns remote
+  116  kubectl run interginx --image=nginx
+  117  kubectl run remotebox --image=busybox -n remote -- sleep 3600
+  118  kubectl expose pod interginx --port=80
+  119  kubectl exec -it remotebox -n remote -- cat /etc/resolv.conf
+  120  kubectl exec -it remotebox -n remote -- nslookup interginx
+  121  kubectl exec -it remotebox -n remote -- nslookup interginx.default.svc.cluster.local
+  122  history
+  123  echo run busybox in the sleepy namespace, run nginx in the awake namespace and expose it. access the nginx application from busybox by using the dns name
+  124  kubectl create ns sleepy
+  125  kubectl create ns awake
+  126  kubectl run awakeging --image=nginx -n awake
+  127  kubectl -n awake expose pod awakeging 
+  128  kubectl -n awake expose pod awakeging --port=80
+  129  kubectl run -n sleepy busybox -- sleep 3600
+  130  kubectl run -n sleepy --image=busybox -- sleep 3600
+  131  kubectl get all -n sleepy 
+  132  kubectl delete pod sleep -n sleepy
+  133  kubectl run sleepy --image=busybox -n sleepy -- sleep 3600
+  134  kubectl get all -n sleepy 
+  135  kubectl -n sleepy exec -it sleepy -- nslookup awakeging.awake.svc.cluster.local
+  136  kubectl -n sleepy exec -it sleepy -- nslookup awakeging.awake
+  137  cd cka/
+  138  kubectl create ns nwp-namespace
+  139  vim nwp-lab9-1.yaml 
+  140  kubectl apply -f nwp-lab9-1.yaml 
+  141  kubectl expose pod nwp-nginx --port=80
+  142  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx
+  143  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  144  vim nwp-lab9-2.yaml 
+  145  kubectl apply -f nwp-lab9-2.yaml 
+  146  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  147  kubectl create deploy busybox --image=busybox -- sleep 3600
+  148  kubectl exec -it busybox-5b5ddd5fc-nzrz9 -- wget --spider --timeout=1 nwp-nginx
+  149  etcdctl
+  150  sudo apt install etcd-client
+  151  sudo etcdctl --help | less
+  152  sudo etcdctl snapshot save -h
+  153  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key get / --prefix --keys-only
+  154  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key snapshot save /tmp/etcdbackup.db
+  155  ls -l /tmp/etcdbackup.db 
+  156  etcdctl --write-out=table snapshot status /tmp/etcdbackup.db 
+  157  sudo  etcdctl --write-out=table snapshot status /tmp/etcdbackup.db 
+  158  history
+  159  kubectl get deploy
+  160  kubectl delete deploy mydb
+  161  cd /etc/kubernetes/manifests/
+  162  ls
+  163  sudo mv * ..
+  164  sudo crictl ps
+  165  sudo etcdctl snapshot restore /tmp/etcdbackup.db --data-dir /var/lib/etcd-backup
+  166  sudo ls -l /var/lib/etcd-backup
+  167  sudo vim /etc/kubernetes/etcd.yaml 
+  168  sudo mv ../*.yaml .
+  169  sudo crictl ps
+  170  kubectl get deploy -A
+  171  sudo mv ..
+  172  sudo mv * ..
+  173  sudo mv /var/lib/etcd /var/lib/etcd-old
+  174  sudo mv /var/lib/etcd-backup /var/lib/etcd
+  175  sudo vim /etc/kubernetes/etcd.yaml 
+  176  sudo mv ../*.yaml .
+  177  sudo crictl ps
+  178  kubectl get deploy -A
+  179  cd
+  180  cd cka
+  181  ls
+  182  ls p*
+  183  vim pv.yaml 
+  184  kubectl explain persistenvolume.spec | less
+  185  kubectl explain persistentvolume.spec | less
+  186  kubectl apply -f pv.yaml 
+  187  vim pvc.yaml 
+  188  kubectl apply -f pvc.yaml 
+  189  kubectl get pvc,pv
+  190  vim pv-pod.yaml 
+  191  kubectl apply -f pv-pod.yaml 
+  192  kubectl exec -it pv-pod -- touch /usr/share/nginx/html/helloDK
+  193  kubectl get pods
+  194  source <(kubectl completion bash)
+  195  kubectl describe pv pv-volume 
+  196  kubectl get pods -o wide | grep pv
+  197  exit
+  198  source <(kubectl completion bash)
+  199  cd cka/
+  200  vim nwpolicy-complete-example.yaml 
+  201  kubectl apply -f nwpolicy-complete-example.yaml 
+  202  vim nwpolicy-complete-example.yaml 
+  203  kubectl expose pod nginx --port=80
+  204  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  205  kubectl get networkpolicy -o yaml
+  206  kubectl get pods --show-labels
+  207  kubectl label pod access=true
+  208  kubectl label pod busybox access=true
+  209  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  210  history
+  211  vim nwpexample.yaml
+  212  kubectl create ns nondefault
+  213  vim nwpexample.yaml
+  214  kubectl apply -f nwpexample.yaml 
+  215  kubectl describe ns nondefault 
+  216  kubectl get networkpolicy -n nondefault
+  217  kubectl get networkpolicy
+  218  kubectl run nginx1 --image=nginx -n nondefault 
+  219  kubectl run nginx2 --image=nginx
+  220  kubectl label pod nginx2 role=web
+  221  kubectl lable pod nginx1 -n nondefault role=web
+  222  kubectl label pod nginx1 -n nondefault role=web
+  223  kubectl expose pod nginx1 -n nondefault --port=80
+  224  kubectl expose pod nginx2 --port=80
+  225  kubectl get pods
+  226  history
+  227  kubectl exec -it busybox -- wget --spider --timeout=1 nginx1.nondefault.svc.cluster.local
+  228  kubectl exec -it busybox -- wget --spider --timeout=1 nginx2.default.svc.cluster.local
+  229  vim nwpexample.yaml 
+  230  kubectl get ns --show-labels
+  231  vim nwpexample.yaml 
+  232  history
+  233  kubectl exec -it busybox -- wget --spider --timeout=1 nginx1.nondefault.svc.cluster.local
+  234  kubectl apply -f nwpexample.yaml 
+  235  kubectl exec -it busybox -- wget --spider --timeout=1 nginx1.nondefault.svc.cluster.local
+  236  kubectl exec -it busybox -- wget --spider --timeout=1 nginx2.default.svc.cluster.local
+  237  vim nwpexample.yaml 
+  238  kubectl get pods busybox --show-labels
+  239  kubectl apply -f nwpexample.yaml 
+  240  kubectl exec -it busybox -- wget --spider --timeout=1 nginx1.nondefault.svc.cluster.local
+  241  kubectl apply -f nwpexample.yaml 
+  242  kubectl get ns
+  243  kubectl get pods remote
+  244  kubectl get pods -n remote
+  245  kubectl apply -f nwpexample.yaml 
+  246  vim nwpexample.yaml 
+  247  #kubectl label pod -n remote role=frontend
+  248  kubectl exec -n remote -it  remotebox wget --spider --timeout=1 nginx1.nondefault.svc.cluster.local
+  249  kubectl exec -n remote -it  remotebox -- wget --spider --timeout=1 nginx1.nondefault.svc.cluster.local
+  250  kubectl get networkpolicy -n nondefault
+  251  kubectl label pod -n remote role=frontend
+  252  kubectl label pod remotepod -n remote role=frontend
+  253  kubectl label pod remotebox -n remote role=frontend
+  254  kubectl exec -n remote -it  remotebox -- wget --spider --timeout=1 nginx1.nondefault.svc.cluster.local
+  255  vim networkpolicy-example.yaml 
+  256  vim nwp-lab9-2.yaml 
+  257  kubectl get netpol
+  258  kubectl delete netpol deny-from-other-namespaces 
+  259  kubectl describe netpol access-nginx
+  260  kubectl get pods
+  261  kubectl get ns
+  262  kubectl get pods remote
+  263  kubectl get pods -n remote
+  264  kubectl -n remote exec -it remotebox -- wget --spider --timeout=1 nginx.default.svc.cluster.local
+  265  history | grep app
+  266  kubectl get all
+  267  kubectl kubectl delete all all
+  268  kubectl delete all all
+  269  kubectl delete all --all
+  270  kubectl api-resources | less
+  271  kubectl api-resources | grep -i networkp
+  272  kubectl explain networkpolicies.spec | less
+  273  kubectl explain networkpolicies.spec.ingress | less
+  274  kubectl explain networkpolicies.crd.projectcalico.org.spec.ingress | less
+  275  kubectl completion -h | less
+  276  kubectl get ds -A
+  277  vim initex.yaml
+  278  grep init *
+  279  vim init-container.yaml 
+  280  kubectl apply -f init-container.yaml 
+  281  kubectl get pods
+  282  kubectl get pods -n kube-system 
+  283  kubectl -n kube-system get pods calico-node-5xcrf -o yaml | less
+  284  vim init-container.yaml 
+  285  kubectl delete -f init-container.yaml 
+  286  kubectl get pods
+  287  kubectl apply -f init-container.yaml 
+  288  kubectl get pods
+  289  kubectl get pods -w
+  290  kubectl run examplepod --image=busybox --dry-run=client -o yaml -- sleep 10
+  291  kubectl run examplepod --image=busybox --dry-run=client -o yaml -- sleep 10 > sleep10.yaml
+  292  vim sleep10.yaml 
+  293  kubectl apply -f sleep10.yaml 
+  294  kubectl get pods
+  295  kubectl get pods -o wide
+  296  kubectl run examplepod --image=busybox --dry-run=client -o yaml -- sh -c "sleep 10 > /tmp/sleep" 
+  297  kubectl create deploy daemon --image=nginx --dry-run=client -o yaml > daemon.yaml
+  298  vim daemon.yaml 
+  299  kubectl apply -f daemon.yaml 
+  300  vim daemon.yaml 
+  301  kubectl apply -f daemon.yaml 
+  302  kubectl get daemonset
+  303  kubectl get pods -o wide
+  304  kubectl edit node control
+  305  kubectl get ds -A
+  306  kubectl -n kube-system get ds calico-node -o yaml | less
+  307  kubectl run busybox date
+  308  kubectl run testbox --image=busybox date
+  309  kubectl run testbox --image=busybox -- date
+  310  kubectl run testbox2 --image=busybox -- date
+  311  kubectl run testbox3 --image=busybox
+  312  kubectl get pods
+  313  vim selector-pod.yaml 
+  314  kubectl apply -f selector-pod.yaml 
+  315  kubectl get pods
+  316  kubectl describe pod nginx
+  317  kubectl label node worker2 disktype=ssd
+  318  kubectl get pods
+  319  kubectl get pods -o wide
+  320  kubectl edit node worker1
+  321  kubectl describe node worker1
+  322  kubectl taint node worker1 storage=ssd:NoSchedule
+  323  kubectl describe node worker1
+  324  kubectl describe node worker1 | less /taint
+  325  kubectl describe node worker1 | less 
+  326  kubectl create deploy tolerateornot --image=nginx --replicas=6
+  327  kubectl get pods -o wide
+  328  vim taint-toleration.yaml 
+  329  kubectl apply -f taint-toleration.yaml 
+  330  kubectl get pods
+  331  kubectl get pods -o wide
+  332  kubectl apply -f taint-toleration.yaml 
+  333  vim taint-toleration.yaml 
+  334  vim taint-toleration2.yaml 
+  335  kubectl apply -f taint-toleration2.yaml 
+  336  kubectl get pods -o wide
+  337  kubectl set -h
+  338  kubectl set resources -h
+  339  kubectl set resources -h | less
+  340  kubectl get deploy
+  341  kubectl taint node worker1 storage=ssd:NoSchedule-
+  342  kubectl delete deploy tolerateornot 
+  343  kubectl create deploy whatever --image=nginx --replicas=3
+  344  kubectl set resources deployment whatever --limits=cpu=200m,memory=512Mi --requests=cpu=100m,memory=256Mi
+  345  kubectl get deploy whatever -o yaml | less
+  346  kubectl get pods -o wide
+  347  kubectl set resources deployment whatever --limits=cpu=200m,memory=512Gi --requests=cpu=100m,memory=256Gi
+  348  kubectl get pods -o wide
+  349  kubectl describe pod whatever-694fbf4f4b-hsrfh 
+  350  kubectl set resources deployment whatever --limits=cpu=200m,memory=4Mi --requests=cpu=100m,memory=2Mi
+  351  kubectl get pods
+  352  kubectl describe pod whatever-684c54dfc-wjjg8 
+  353  kubectl get pods
+  354  kubectl describe pod whatever-684c54dfc-wqmsw 
+  355  kubectl delete deployments.apps whatever 
+  356  kubectl create ns notmuch
+  357  kubectl create quota -h | less
+  358  kubectl create quota notmany --hard=cpu=1,memory=1G,pods=2,services=3,resourcequotas=1,secrets=5,persistentvolumeclaims=10 -n notmuch
+  359  kubectl create deploy alot --image=nginx --replicas=3 -n notmuch 
+  360  kubectl get all -n notmuch
+  361  kubectl -n notmuch describe replicaset alot-8465f68dc6 
+  362  kubectl set resources deployment alot --limits=cpu=200m,memory=128Mi --requests=cpu=100m,memory=2Mi -n notmuch 
+  363  kubectl get all -n notmuch
+  364  kubectl describe -n notmuch pod alot-7cd6cbc85-zzm9t 
+  365  kubectl -n notmuch delete quota notmany 
+  366  kubectl get all -n notmuch
+  367  kubectl create deploy mydb --image=mariadb --replicas=3
+  368  kubectl get all --selector app=mydb
+  369  kubectl create cm  -h | less
+  370  kubectl create cm mydbvars --from-literal=MARIADB_ROOT_PASSWORD=password
+  371  kubectl get cm mydbvars -o yaml
+  372  kubectl set env -h | less
+  373  #kubectl set env --from=configmap/myconfigmap --prefix=MYSQL_ deployment/myapp
+  374  kubectl set env --from=configmap/mydbvars deployment/mydb
+  375  kubec
+  376  kubectl get all --selector app=mydb
+  377  kubectl get deploy mydb -o yaml | less
+  378  kubectl create secret mydbsecretpw --from-literal=ROOT_PASSWORD=password
+  379  kubectl create secret -h | less
+  380  kubectl create secret generic -h | less
+  381  kubectl create secret generic mydbsecretpw --from-literal=ROOT_PASSWORD=password
+  382  kubectl describe secrets mydbsecretpw 
+  383  kubectl get secrets mydbsecretpw -o yaml
+  384  echo cGFzc3dvcmQ= | base64 -d
+  385  vim exo2.txt
+  386  #kubectl create secret generic mynewdbvars --from-literal=whatever=password 
+  387  kubectl create secret generic mynewdbvars --from-literal=whatever=password 
+  388  kubectl get secrets mynewdbvars -o yaml
+  389  kubectl create deploy whateverdb --image=mariadb
+  390  kubectl set env --from secret/mynewdbvars deploy/whateverdb
+  391  kubectl edit deploy whateverdb 
+  392  kubectl get all --selector app=whateverdb
+  393  kubectl explain deploy.spec | less
+  394  kubectl get nodes
+  395  kubectl drain node worker2
+  396  kubectl drain worker2
+  397  kubectl drain worker2 --force
+  398  kubectl drain worker2 --force --ignore-daemonsets
+  399  kubectl get nodes
+  400  kubectl get pods -o wide
+  401  kubectl edit node worker2
+  402  kubectl uncordon worker2
+  403  kubectl get nodes
+  404  kubectl get pods -o wide
+  405  vim morevolumes.yaml 
+  406  kubectl apply -f morevolumes.yaml 
+  407  kubectl get pods
+  408  kubectl delete pods morevol 
+  409  kubectl get pods
+  410  kubectl apply -f morevolumes.yaml 
+  411  kubectl get pods
+  412  kubectl exec -it morevol -c centos1 touch /centos1/centfile
+  413  kubectl exec -it morevol -c centos2 ls -l /centos2/
+  414  kubectl exec -it morevol -c centos2 -- ls -l /centos2/
+  415  kubectl top pods
+  416  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components
+  417  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  418  kubectl get pods -n kube-system
+  419  kubectl edit deploy -n kube-system metrics-server 
+  420  kubectl get pods -n kube-system
+  421  kubectl top pods
+  422  kubectl get pods -n kube-system -o wide
+  423  sudo -i
+  424  cd /etc/kubernetes/manifests/
+  425  ls
+  426  vim etcd.yaml
+  427  sudo vim etcd.yaml
+  428  sudo ls -l /var/lib/etcd/
+  429  sudo ls -l /var/lib/etcd/member
+  430  ls -l /etc/pki
+  431  ls -l /etc/ssl
+  432  ls -l /etc/ssl/certs
+  433  sudo ps aux | grep kube-api
+  434  cd /cka
+  435  cd /
+  436  cd home/student/
+  437  ls
+  438  cd cka
+  439  ls
+  440  vim security-context.yaml 
+  441  kubectl apply -f security-context.yaml 
+  442  kubectl exec -it security-context-demo -- sh
+  443  kubectl create role -h
+  444  kubectl create role -h | less
+  445  kubectl get roles
+  446  kubectl create role pod-reader --verb=get --verb=list --verb=watch --resource=pods
+  447  kubectl get roles
+  448  kubectl describe role pod-reader 
+  449  kubectl get roles -n awake
+  450  kubectl get pods -o yaml pv-pod | less
+  451  kubectl get sa -A
+  452  kubectl create sa myown
+  453  kubectl get roles
+  454  kubectl create rolebinding -h | less
+  455  #kubectl create rolebinding admin-binding --role=admin --serviceaccount=monitoring:sa-dev
+  456  kubectl create rolebinding pod-reader-binding --role=pod-reader --serviceaccount=default:myown
+  457  kubectl get deploy
+  458  kubectl set serviceaccount -h | less
+  459  kubectl set serviceaccount deploy mydb myown
+  460  exit
+  461  history
+  462  history > /tmp/novo-history.txt
