@@ -1,0 +1,146 @@
+ON CONTROLLER NODE
+    1  git clone https://github.com/sandervanvugt/cka
+    2  cd cka
+    3  ls
+    4  ./setup-container.sh 
+    5  ls
+    6  ./setup-kubetools.sh 
+    7  history
+    8  sudo kubeadm init
+    9  cd
+   10  mkdir -p $HOME/.kube
+   11  kubectl get all
+   12  kubectl get pods -n kube-system
+   13  source <(kubectl completion bash)
+   14  kubectl describe -n kube-system pod coredns-7c65d6cfc9-z5rsc 
+   15  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   16  kubectl get pods -n kube-system
+   17  history
+   18  kubectl get nodes
+   19  kubectl describe node control 
+   20  history
+   21  cd cka/
+   22  ./counter.sh 12
+   23  kubectl get nodes
+   24  sudo apt install helm
+   25  helm
+   26  cd ..
+   27  ls
+   28  tar xvf helm-v3.16.2-linux-arm64.tar.gz 
+   29  sudo cp linux-arm64/helm /usr/local/bin
+   30  helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+   31  kubectl get all -n ingress-nginx 
+   32  history
+   33  kubectl create deploy nginxsvc --image=nginx --port=80
+   34  kubectl expose deploy nginxsvc
+   35  kubectl get all --selector app=nginxsvc
+   36  kubectl create ingress nginxsvc --class=nginx --rule=nginxsvc.info/*=nginxsvc:80
+   37  kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
+   38  bg
+   39  sudo sh -c 'echo "127.0.0.1 nginxsvc.info" >> /etc/hosts'
+   40  cat /etc/hosts
+   41  curl nginxsvc.info:8080
+   42  kubectl create ing -h | less
+   43  history
+   44  kubectl get all -n ingress-nginx 
+   45  kubectl edit -n ingress-nginx svc ingress-nginx-controller
+   46  kubectl get all -n ingress-nginx 
+   47  cd cka
+   48  ./counter.sh 1
+   49  history
+   50  kubectl edit svc nginxsvc 
+   51  kubectl describe ingress nginxsvc 
+   52  kubectl describe svc nginxsvc 
+   53  kubectl edit svc nginxsvc 
+   54  kubectl describe svc nginxsvc 
+   55  kubectl describe node control | less
+   56  df -h
+   57  kubectl create ns limited
+   58  kubectl create quota qtest --hard pods=3,cpu=100m,memory=500Mi
+   59  kubectl get pods
+   60  kubectl scale deploy nginxsvc --replicas=5
+   61  kubectl get all
+   62  kubectl delete quota qtest 
+   63  kubectl scale deploy nginxsvc --replicas=5 -n limited
+   64  kubectl create quota qtest --hard pods=3,cpu=100m,memory=500Mi -n limited
+   65  kubectl describe quota -n limited 
+   66  kubectl create deploy nginx --image=nginx --replicas=3 -n limited
+   67  kubectl get all -n limited
+   68  kubectl describe rs nginxsvc-7f8cdcb4db 
+   69  kubectl get all -n limited 
+   70  kubectl -n limited describe rs nginx-676b6c5bbc 
+   71  history
+   72  kubectl -n limited set resources deploy nginx --requests cpu=100m,memory=5Mi --limits cpu=200m,memory=20m
+   73  kubectl -n limited set resources deploy nginx --requests cpu=100m,memory=20Mi --limits cpu=200m,memory=40m
+   74  kubectl -n limited set resources deploy nginx --requests cpu=100m,memory=20Mi --limits cpu=200m,memory=40Mi
+   75  kubectl get pods -n limited
+   76  kubectl get all -n limited
+   77  kubectl scale -n limited deploy nginx --replicas=4
+   78  kubectl scale -n limited deploy nginx --replicas=3
+   79  kubectl get all -n limited
+   80  kubectl describe -n limited quota qtest 
+   81  kubectl edit quota -n limited qtest 
+   82  kubectl get all -n limited
+   83  kubectl scale -n limited deploy nginx --replicas=3
+   84  kubectl get all -n limited
+   85  kubectl describe -n limited quota qtest 
+   86  kubectl scale -n limited deploy nginx --replicas=2
+   87  kubectl get all -n limited
+   88  kubectl scale -n limited deploy nginx --replicas=3
+   89  kubectl get all -n limited
+   90  history
+   91  kubectl create ns limited
+   92  vim limitrange.yaml 
+   93  kubectl apply -f limitrange.yaml -n limited 
+   94  kubectl describe ns limited 
+   95  kubectl run limitpod --image=nginx -n limited
+   96  kubectl -n limited delete quota
+   97  kubectl -n limited delete quota qtest 
+   98  kubectl run limitpod --image=nginx -n limited
+   99  kubectl describe -n limited pod limitpod 
+  100  history
+  101  kubectl get pods -A -o wide
+  102  kubectl get pods -o wide
+  103  kubectl create deploy testdeploy --image=nginx --replicas=6
+  104  kubectl get pods -o wide
+  105  kubectl drain worker2
+  106  kubectl drain worker2 --ignore-daemonsets --force
+  107  kubectl get pods
+  108  kubectl get pods -o wide
+  109  kubectl get nodes
+  110  kubectl describe node worker2
+  111  kubectl edit node worker2
+  112  kubectl uncordon worker2
+  113  kubectl get pods -o wide
+  114  kubectl create newweb --image=nginx --replicas=20
+  115  kubectl create deploy newweb --image=nginx --replicas=20
+  116  kubectl get pods -o wide
+  117  kubectl delete deploy newweb 
+  118  history
+  119  sudo ls -l /etc/kubernetes/manifests
+  120  kubectl run staticpod --image=nginx --dry-run=client -o yaml
+  121  kubectl get pods
+  122  sudo -i
+  123  history >> /tmp/history-14Oct24.txt
+
+ON WORKER1
+    1  git clone https://github.com/sandervanvugt/cka
+    2  cd cka
+    3  ./setup-container.sh
+    4  ./setup-kubetools.sh
+    5  sudo kubeadm join 192.168.29.220:6443 --token 1lmw4f.ow5iplrq9duz747f 	--discovery-token-ca-cert-hash sha256:9f4ca9d11687b1ef871fbc306e7fae682b5750de059cea3420fb4e5111a76c39
+    6  history
+    7  sudo vim /etc/kubernetes/manifests/staticpod.yaml
+    8  crictl ps
+    9  sudo crictl ps
+   10  sudo -i
+   11  history
+
+ON CLIENT
+42  scp helm-v3.16.2-linux-arm64.tar.gz 192.168.29.220:/home/student/Downloads
+   43  scp helm-v3.16.2-linux-arm64.tar.gz 192.168.29.220:/home/student/
+   44  curl 10.103.142.248
+   45  history
+   46  sudo vim /etc/hosts
+   47  curl nginxsvc.info:31390
+
