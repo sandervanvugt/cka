@@ -118,8 +118,6 @@ sudo sed -i 's/priority 255/priority 253/' keepalived-control3.conf
 sudo cp keepalived.conf /etc/keepalived/
 scp keepalived-control2.conf control2:/tmp && ssh -t control2 'sudo -S cp /tmp/keepalived-control2.conf /etc/keepalived/keepalived.conf'
 scp keepalived-control3.conf control3:/tmp && ssh -t control3 'sudo -S cp /tmp/keepalived-control3.conf /etc/keepalived/keepalived.conf'
-echo DEBUG check if files are copied over successfully
-read
 
 ### rewriting haproxy.cfg with site specific IP addresses
 sudo sed -i s/server\ control1\ 1.1.1.1\:6443\ check/server\ control1\ $CONTROL1_IP\:6443\ check/ haproxy.cfg
@@ -130,8 +128,6 @@ sudo sed -i s/server\ control3\ 1.1.1.3\:6443\ check/server\ control3\ $CONTROL3
 sudo cp haproxy.cfg /etc/haproxy/
 scp haproxy.cfg control2:/tmp && ssh -t control2 'sudo -S cp /tmp/haproxy.cfg /etc/haproxy/'
 scp haproxy.cfg control3:/tmp && ssh -t control3 'sudo -S cp /tmp/haproxy.cfg /etc/haproxy/'
-echo DEBUG check if haproxy files are copied over successfully
-read
 
 # start and enable services
 sudo systemctl enable keepalived --now

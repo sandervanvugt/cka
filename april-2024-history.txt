@@ -1,0 +1,291 @@
+    1  ip a
+    2  sudo apt install git vim -y
+    3  git clone https://github.com/sandervanvugt/cka
+    4  cd cka
+    5  ls *sh
+    6  ./setup-container.sh 
+    7  ls
+    8  ls *sh
+    9  ./setup-kubetools-previousversion.sh 
+   10  sudo apt install jq -y
+   11  history
+   12  sudo kubeadm init
+   13  history
+   14  mkdir ~/.kube
+   15  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+   16  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+   17  kubectl get all
+   18  #kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   19  kubectl get pods -n kube-system
+   20  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   21  kubectl get pods -n kube-system
+   22  kubectl get ds -n kube-system
+   23  kubectl get nodes
+   24  history
+   25  kubectl create testapp --image=nginx --replicas=3
+   26  kubectl create deploy testapp --image=nginx --replicas=3
+   27  kubectl get all -o wide
+   28  history
+   29  cd ..
+   30  ls
+   31  tar xvf helm-v3.14.4-linux-amd64.tar.gz 
+   32  sudo mv linux-amd64/helm /usr/local/bin
+   33  helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+   34  source <(kubectl completion bash)
+   35  kubectl get pods -n ingress-nginx 
+   36  kubectl create deploy nginxsvc --image=nginx --replicas=3
+   37  kubectl get all --selector app=nginxsvc
+   38  kubectl expose deploy nginxsvc 
+   39  kubectl expose deploy nginxsvc --port=80
+   40  kubectl get all --selector app=nginxsvc
+   41  kubectl describe svc nginxsvc 
+   42  kubectl create ingress nginxsvc --class=nginx --rule=nginxsvc.info/*=nginxsvc:80
+   43  kubectl describe ing nginxsvc 
+   44  sudo vim /etc/hosts
+   45  kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
+   46  bg
+   47  curl nginxsvc.info
+   48  curl nginxsvc.info:8080
+   49  history
+   50  curl nginxsvc.info:8080
+   51  kubectl edit svc nginxsvc 
+   52  curl nginxsvc.info:8080
+   53  kubectl describe ing nginxsvc 
+   54  kubectl describe svc nginxsvc 
+   55  kubectl edit svc nginxsvc 
+   56  curl nginxsvc.info:8080
+   57  history
+   58  kubectl create ns limited
+   59  kubectl create quota -h | less
+   60  kubectl create quota qtest --hard pods=3,cpu=100m,memory=500Mi --namespace=limited
+   61  kubectl describe quota -n limited 
+   62  kubectl describe ns limited
+   63  kubectl create deploy nginx --image=nginx --replicas=3 -n limited
+   64  kubectl get all -n limited
+   65  kubectl describe -n limited rs nginx-7854ff8877 
+   66  kubectl describe ns limited
+   67  kubectl set resources -h | less
+   68  kubectl set -n limited resources deploy nginx --requests cpu=100m,memory=5Mi --limits cpu=200m,memory=20Mi
+   69  kubectl get all -n limited
+   70  kubectl describe ns limited
+   71  kubectl edit quota -n limited  qtest 
+   72  kubectl describe ns limited
+   73  kubectl scale -n limited deployment nginx --replicas=2
+   74  kubectl scale -n limited deployment nginx --replicas=3
+   75  kubectl describe ns limited
+   76  history
+   77  kubectl edit node control 
+   78  kubectl cordon worker1
+   79  kubectl edit node worker1
+   80  kubectl get nodes
+   81  kubectl uncordon worker1
+   82  kubectl get pods -n kube-system
+   83  kubectl drain node worker1
+   84  kubectl drain worker1 
+   85  kubectl get nodes
+   86  kubectl edit node worker1
+   87  kubectl get nodes
+   88  kubectl get pods -o wide
+   89  kubectl drain worker1
+   90  kubectl get nodes
+   91  kubectl drain worker1 --ignore-daemonsets
+   92  kubectl edit node worker1
+   93  kubectl get pods -o wide
+   94  kubectl get nodes
+   95  kubectl create deploy ready --image=nginx --replicas=3
+   96  kubectl get pods -o wide --selector app=ready
+   97  kubectl get nodes
+   98  kubectl scale deploy ready --replicas=0
+   99  kubectl scale deploy ready --replicas=3
+  100  kubectl get pods -o wide --selector app=ready
+  101  cd cka/
+  102  vim networkpolicy-example.yaml 
+  103  git pull
+  104  vim nwpolicy-complete-example.yaml 
+  105  kubectl apply -f nwpolicy-complete-example.yaml 
+  106  kubectl expose pod nginx --port=80
+  107  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  108  kubectl label pod busybox access=true
+  109  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  110  kubectl create ns nwp-namespace
+  111  vim nwp-lab9-1.yaml 
+  112  kubectl apply -f nwp-lab9-1.yaml 
+  113  kubectl expose pod nwp-nginx --port=80
+  114  kubectl exec -n nwp-namespace nwp-busybox -- wget --spider --timeout=1 nwp-nginx
+  115  kubectl exec -n nwp-namespace nwp-busybox -- nslookup nwp-nginx
+  116  kubectl exec -n nwp-namespace nwp-busybox -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  117  vim nwp-lab9-2.yaml 
+  118  kubectl apply -f nwp-lab9-2.yaml 
+  119  kubectl exec -n nwp-namespace nwp-busybox -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  120  kubectl create deploy busybox --image=busybox -- sleep 3600
+  121  kubectl exec -it busybox-6fc6c44c5b-x5vrx -- wget --spider --timeput=1 nwp-nginx
+  122  kubectl exec -it busybox-6fc6c44c5b-x5vrx -- wget --spider --timeout=1 nwp-nginx
+  123  kubectl delete -f nwp-lab9-2.yaml 
+  124  history
+  125  kubectl top
+  126  kubectl top pod
+  127  cd
+  128  git clone https://github.com/kubernetes-sigs/metrics-server.git
+  129  cd metrics-server/
+  130  ls
+  131  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  132  kubectl -n kube-system get pods
+  133  kubectl logs -n kube-system metrics-server-6d94bc8694-76vzc 
+  134  kubectl -n kube-system get deploy
+  135  kubectl -n kube-system edit deployments.apps metrics-server 
+  136  kubectl get pods -n kube-system 
+  137  kubectl top pods
+  138  cd /etc/kubernetes/manifests/
+  139  ls
+  140  cd
+  141  cd -
+  142  less kube-scheduler.yaml 
+  143  sudo less kube-scheduler.yaml 
+  144  cd
+  145  kubectl run auto-web --image=nginx --dry-run=client -o yaml > auto-web.yaml
+  146  cat auto-web.yaml 
+  147  kubectl get pods
+  148  cd /etc/kubernetes/manifests/
+  149  ls -l
+  150  sudo apt install etcd-client
+  151  sudo etcdctl --help
+  152  sudo ETCDCTL_API=3 etcdctl --help
+  153  ps aux | grep etcd
+  154  cd ../pki/
+  155  ls
+  156  cd etcd/
+  157  ls
+  158  cd
+  159  sudo ETCDCTL_API=3 etcdctl --endpoints localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key get / --prefix --keys-only
+  160  sudo ETCDCTL_API=3 etcdctl --endpoints localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key snapshot save /tmp/etcdbackup.db
+  161  ls -l /tmp/etcdbackup.db 
+  162  sudo ETCDCTL_API=3 etcdctl --endpoints localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key snapshot save /tmp/etcdbackup-$(date +%d-%m-%y).db
+  163  cd /etc/kubernetes/manifests/
+  164  ls
+  165  sudo vim etcd.yaml
+  166  cd
+  167  history
+  168  sudo ETCDCTL_API=3 etcdctl --write-out=table snapshot status /tmp/etcdbackup.db 
+  169  cp /tmp/etcdbackup.db /tmp/etcdbackup.db.2
+  170  kubectl get deploy
+  171  kubectl delete deploy --all
+  172  cd /etc/kubernetes/manifests/
+  173  ls
+  174  ls ..
+  175  sudo mv * ..
+  176  ls
+  177  sudo crictl ps
+  178  sudo mkdir /var/lib/etcd-backup
+  179  sudo ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcdbackup.db --data-dir /var/lib/etcd-backup
+  180  sudo rmdir /var/lib/etcd-backup/
+  181  sudo ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcdbackup.db --data-dir /var/lib/etcd-backup
+  182  sudo ls -l /var/lib/etcd-backup/
+  183  sudo ls -l /var/lib/etcd-backup/member
+  184  sudo ls -l /var/lib/etcd/member
+  185  sudo vim /etc/kubernetes/etcd.yaml 
+  186  sudo mv ../*.yaml .
+  187  ls
+  188  sudo crictl ps
+  189  kubectl get deploy -A
+  190  sudo mv ../*.yaml .
+  191  sudo mv *.yaml ..
+  192  ls
+  193  vim ../etcd.yaml 
+  194  sudo vim ../etcd.yaml 
+  195  sudo mv /var/lib/etcd /var/lib/etcd.old
+  196  sudo mv /var/lib/etcd-backup /var/lib/etcd
+  197  sudo vim ../etcd.yaml 
+  198  mv ../*.yaml .
+  199  sudo mv ../*.yaml .
+  200  sudo crictl ps
+  201  kubectl get deploty
+  202  kubectl get deploy
+  203  cd
+  204  history
+  205  sudo apt update
+  206  sudo apt-cache madison kubeadm
+  207  kubeadm version
+  208  sudo apt update
+  209  sudo apt-cache madison kubeadm
+  210  sudo apt-mark unhold kubeadm
+  211  udo apt-get update && sudo apt-get install -y kubeadm='1.29.3-*'
+  212  sudo apt-get update && sudo apt-get install -y kubeadm='1.29.3-*'
+  213  pager /etc/apt/sources.list.d/kubernetes.list
+  214  vim /etc/apt/sources.list.d/kubernetes.list
+  215  sudo vim /etc/apt/sources.list.d/kubernetes.list
+  216  history
+  217  sudo apt update
+  218  sudo apt-cache madison kubeadm
+  219  sudo apt-get update && sudo apt-get install -y kubeadm='1.29.3-1'
+  220  sudo apt-get update && sudo apt-get install -y kubeadm='1.29.3-1.1'
+  221  sudo apt-mark hold kubeadm
+  222  kubeadm version
+  223  sudo kubeadm upgrade plan
+  224  sudo kubeadm upgrade apply v1.29.3
+  225  sudo apt-mark unhold kubelet kubectl
+  226  sudo apt-get update && sudo apt-get install -y kubelet='1.29.3-1.1' kubectl='1.29.3-1.1'
+  227  sudo apt-mark hold kubelet kubectl
+  228  sudo systemctl daemon-reload
+  229  sudo systemctl restart kubelet
+  230  kubectl get nodes
+  231  kubectl get pods
+  232  history
+  233  kubectl edit node control 
+  234  kubectl get pods -A -o wide
+  235  kubectl explain pod.spec.nodeSelector
+  236  cd cka/
+  237  vim selector-pod.yaml 
+  238  kubectl apply -f selector-pod.yaml 
+  239  kubectl delete pods --all
+  240  kubectl apply -f selector-pod.yaml 
+  241  kubectl get pods
+  242  kubectl describe pods nginx
+  243  kubectl label nodes worker2 disktype=ssd
+  244  kubectl get pods
+  245  kubectl taint nodes worker1 example-key=value1:NoSchedule
+  246  kubectl describe nodes worker1
+  247  kubectl cordon worker2
+  248  kubectl create deploy nginx-taint --image=nginx
+  249  kubectl scale deploy nginx-taint --replicas=3
+  250  kubectl get pods -o wide
+  251  vim taint-toleration.yaml 
+  252  kubectl apply -f taint-toleration.yaml 
+  253  kubectl get pods
+  254  kubectl get pods -o wide
+  255  kubectl edit node worker1
+  256  kubectl edit node worker2
+  257  kubectl get nodes
+  258  kubectl get pods -o wide
+  259  vim pod-with-node-affinity.yaml 
+  260  vim pod-with-node-anti-affinity.yaml 
+  261  vim pod-with-node-antiaffinity.yaml 
+  262  vim pod-with-pod-affinity.yaml 
+  263  history
+  264  kubectl create role -h | less
+  265  #kubectl create role pod-reader --verb=get --verb=list --verb=watch --resource=pods
+  266  kubectl create ns roles
+  267  kubectl create role viewers --verb=get --verb=list --verb=watch --resource=pods -n roles
+  268  kubectl run viewpod --image=nginx --dry-run=client -o yaml > viewpod.yaml
+  269  kubectl create sa viewers
+  270  kubectl explain pod.spec.serviceaccount
+  271  kubectl explain pod.spec.serviceAccount
+  272  vim viewpod.yaml 
+  273  kubectl get sa -n roles
+  274  kubectl create sa viewers -n roles
+  275  kubectl get sa -n roles
+  276  vim viewpod.yaml 
+  277  kubectl explain pod.metadata
+  278  vim viewpod.yaml 
+  279  kubectl get roles -n roles
+  280  kubectl create rolebinding -h | less
+  281  #kubectl create rolebinding admin-binding --role=admin --serviceaccount=monitoring:sa-dev
+  282  kubectl -n roles create rolebinding viewers --role=viewers --serviceaccount=roles:viewers
+  283  kubectl get roles,rolebindings,sa -n roles
+  284  history
+  285  kubectl api-resources | less
+  286  kubectl get roles,rolebindings,sa -n roles
+  287  kubectl get pods -n kube-system
+  288  kubectl get -n kube-system pod metrics-server-67fc4df55-9ddb8 -o yaml | grep -i serviceacc
+  289  kubectl config view
+  290  history
+

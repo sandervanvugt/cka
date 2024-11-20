@@ -1,0 +1,2 @@
+ON DEMAND COURSE
+*	Certified Kubernetes Administrator (CKA) 3rd edition: https://learning.oreilly.com/course/certified-kubernetes-administrator/9780138103804/

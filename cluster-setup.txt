@@ -1,0 +1,28 @@
+ON AL NODES
+git clone https://github.com/sandervanvugt/cka
+cd cka
+./setup-container.sh
+sudo ./setup-kubetools-specific-version.sh
+
+ON CONTROL NODE
+sudo kubeadm init
+READ COMMAND OUTPUT!!!!
+
+ON CONTROL NODE
+mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
+
+PRINT THE JOIN COMMAND
+sudo kubeadm token create --print-join-command
+
+ON ALL WORKER NODES
+run the join command that resulted from the previous step
+
+ON CONTROL NODE
+kubectl get nodes
+
+MORE INFORMATION
+https://learning.oreilly.com/videos/certified-kubernetes-administrator/9780138103804/9780138103804-CKA3_01_02_00/
+
