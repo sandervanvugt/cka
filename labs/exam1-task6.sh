@@ -7,7 +7,7 @@ sleep 5
 kubectl run labgrade -n access --image=busybox -- sleep 3600 &>/dev/null
 sleep 5
 
-if kubectl exec -n access labgrade -- wget --spider --timeout=1 lab157web.restricted.svc.cluster.local &>/dev/null
+if kubectl exec -n access labgrade -- wget --spider --timeout=1 lab156web.restricted.svc.cluster.local &>/dev/null
 then
 	echo -e "\033[31m[FAIL]\033[0m\t\t testpod is getting access, which means the networkpolicy is not correct"
 else
@@ -50,7 +50,7 @@ TOTAL=$(( TOTAL + 8 ))
 ##setting the label so that the testpod is getting access
 kubectl label -n access pod labgrade access="true"
 
-if kubectl exec -n access labgrade -- wget --spider --timeout=1 lab157web.restricted.svc.cluster.local &>/dev/null
+if kubectl exec -n access labgrade -- wget --spider --timeout=1 lab156web.restricted.svc.cluster.local &>/dev/null
 then
         echo -e "\033[32m[OK]\033[0m\t\t previous revision of deploy updated was using nginx:latest"
         SCORE=$(( SCORE + 10 ))

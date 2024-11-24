@@ -1,36 +1,17 @@
-if grep $(minikube ip).*myapp.info /etc/hosts &>/dev/null
+if kubectl get nodes -o yaml | grep 'storage: ssd' &>/dev/null
 then
-	echo -e "\033[32m[OK]\033[0m\t\t name resolution for myapp.info is setup"
+	echo -e "\033[32m[OK]\033[0m\t\t Found at least one node with the label storage=ssd"
 	SCORE=$(( SCORE + 10 ))
 else
-	echo -e "\033[31m[FAIL]\033[0m\t\t no name resolution for myapp.info was found"
+	echo -e "\033[31m[FAIL]\033[0m\t\t no nodes with label storage=ssd were found"
 fi
 TOTAL=$(( TOTAL + 10 ))
 
-if kubectl describe svc task7svc | grep app=updates &>/dev/null
+if kubectl get pods lab167pod -o yaml | grep nodeSelector -A1 | grep 'storage: ssd' &>/dev/null
 then
-        echo -e "\033[32m[OK]\033[0m\t\t Service task7svc found and exposes Deploy updates"
+        echo -e "\033[32m[OK]\033[0m\t\t nodeSelector property was found on the Pod lab167pod"
         SCORE=$(( SCORE + 10 ))
 else
-        echo -e "\033[31m[FAIL]\033[0m\t\t No Service task7svc exposing Deploy updates was found"
-fi
-TOTAL=$(( TOTAL + 10 ))
-
-if kubectl get pods -n ingress-nginx | grep controller | grep Running &>/dev/null
-then
-        echo -e "\033[32m[OK]\033[0m\t\t found a running ingress controller"
-        SCORE=$(( SCORE + 10 ))
-else
-        echo -e "\033[31m[FAIL]\033[0m\t\t no running ingress controller was found"
-fi
-TOTAL=$(( TOTAL + 10 ))
-
-
-if kubectl describe ing | grep task7svc:80 &>/dev/null
-then
-        echo -e "\033[32m[OK]\033[0m\t\t ingress rule forwarding traffic to task7svc was found"
-        SCORE=$(( SCORE + 10 ))
-else
-        echo -e "\033[31m[FAIL]\033[0m\t\" no ingress rule forwarding traffic to task7svc was found"
+        echo -e "\033[31m[FAIL]\033[0m\t\t no nodeSelector propertyn was found on the Pod lab167pod"
 fi
 TOTAL=$(( TOTAL + 10 ))

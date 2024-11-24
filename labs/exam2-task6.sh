@@ -1,22 +1,17 @@
-# get the revision number of the last update that was found
-kubectl rollout history deployment updates > /tmp/task6.txt
-LAST=$(tail -2 /tmp/task6.txt | head -1 | awk '{ print $1 }')
-BEFORE=$(( LAST -1 ))
-
-if kubectl rollout history deployment updates --revision=${LAST} | grep 'nginx:1.17' &>/dev/null
+if kubectl get pods -n kube-system | grep metrics-server | grep '1/1'
 then
-	echo -e "\033[32m[OK]\033[0m\t\t last revision of the updated deploy is set to nginx:1.17"
+	echo -e "\033[32m[OK]\033[0m\t\t Good! Metrics server Pod is up and running"
 	SCORE=$(( SCORE + 10 ))
 else
-	echo -e "\033[31m[FAIL]\033[0m\t\t last revision of the updated deploy is not set to nginx:1.17"
+	echo -e "\033[31m[FAIL]\033[0m\t\t Metrics server Pod doesn't seem to be running"
 fi
 TOTAL=$(( TOTAL + 10 ))
 
-if kubectl rollout history deployment updates --revision=${BEFORE} | grep 'nginx:latest' &>/dev/null
+if [[ $(kubectl top pods -A --sort-by=cpu | head -2 | tail -1 | awk '{ print $2 }') == $(cat /tmp/load.txt) ]]
 then
-        echo -e "\033[32m[OK]\033[0m\t\t previous revision of deploy updated was using nginx:latest"
+        echo -e "\033[32m[OK]\033[0m\t\t kubectl top is working"
         SCORE=$(( SCORE + 10 ))
 else
-        echo -e "\033[31m[FAIL]\033[0m\t\t previous revision of deploy updated not found or not using nginx:latest"
+        echo -e "\033[31m[FAIL]\033[0m\t\t kubectl top is not working correctly"
 fi
 TOTAL=$(( TOTAL + 10 ))

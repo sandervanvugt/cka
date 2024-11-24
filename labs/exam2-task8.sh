@@ -1,17 +1,17 @@
-if kubectl describe networkpolicy | grep 'PodSelector:.*type=webapp' &>/dev/null && kubectl describe networkpolicy | grep 'PodSelector:.*type=tester' &>/dev/null
+if kubectl get svc lab168svc | grep NodePort &>/dev/null 
 then
-        echo -e "\033[32m[OK]\033[0m\t\t NetworkPolicy was found with correct configuration"
+        echo -e "\033[32m[OK]\033[0m\t\t The NodePort Service lab168svc was found"
         SCORE=$(( SCORE + 10 ))
 else
-        echo -e "\033[31m[FAIL]\033[0m\t\t No NetworkPolicy with correct configuration was found"
+        echo -e "\033[31m[FAIL]\033[0m\t\t The NodePort Service lab168svc was not found"
 fi
 TOTAL=$(( TOTAL + 10 ))
 
-if kubectl exec -it nevatest -- wget --spider --timeout=1 nevaginx &>/dev/null
+if kubectl describe ing lab168pod | grep '/hi.*lab168pod:80 ..*)' &>/dev/null
 then
-        echo -e "\033[32m[OK]\033[0m\t\t the tester pod can access the nevaginx pod"
+        echo -e "\033[32m[OK]\033[0m\t\t an ingress resource was found and it does have pod endpoints"
         SCORE=$(( SCORE + 10 ))
 else
-        echo -e "\033[31m[FAIL]\033[0m\t\t the tester pod cannot access the nevaginx pod"
+        echo -e "\033[31m[FAIL]\033[0m\t\t no ingress resource with pod endpoints was found"
 fi
 TOTAL=$(( TOTAL + 10 ))

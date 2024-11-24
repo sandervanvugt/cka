@@ -3,67 +3,67 @@
 clear
 # evaluating tasks
 echo -e "\033[1mchecking task 1 results\033[0m"
-source labs/exam1-task1.sh
+source labs/exam2-task1.sh
 echo the score is $SCORE
 TOTALSCORE=$SCORE
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 2 results\033[0m"
-source labs/exam1-task2.sh
+source labs/exam2-task2.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 3 results\033[0m"
-source labs/exam1-task3.sh
+source labs/exam2-task3.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 4 results\033[0m"
-source labs/exam1-task4.sh
+source labs/exam2-task4.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 5 results\033[0m"
-source labs/exam1-task5.sh
+source labs/exam2-task5.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 6 results\033[0m"
-source labs/exam1-task6.sh
+source labs/exam2-task6.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 7 results\033[0m"
-source labs/exam1-task7.sh
+source labs/exam2-task7.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 8 results\033[0m"
-source labs/exam1-task8.sh
+source labs/exam2-task8.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 9 results\033[0m"
-source labs/exam1-task9.sh
+source labs/exam2-task9.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 10 results\033[0m"
-source labs/exam1-task10.sh
+source labs/exam2-task10.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL
 
 echo -e "\033[1mchecking task 11 results\033[0m"
-source labs/exam1-task11.sh
+source labs/exam2-task11.sh
 echo the score is $SCORE
 TOTALSCORE=$(( TOTAL + SCORE ))
 TOTALTOTAL=$TOTAL

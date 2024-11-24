@@ -84,8 +84,8 @@ ssh-copy-id control3
 
 # configuring sudo for easier access
 sudo sh -c "echo 'Defaults timestamp_type=global,timestamp_timeout=60' >> /etc/sudoers"
-sudo scp -p /etc/sudoers student@control2:/tmp/ && ssh -t control2 'sudo -S chown root:root /tmp/sudoers' && ssh -t control2 'sudo -S cp -p /tmp/sudoers /etc/'
-sudo scp -p /etc/sudoers student@control3:/tmp/ && ssh -t control3 'sudo -S chown root:root /tmp/sudoers' && ssh -t control3 'sudo -S cp -p /tmp/sudoers /etc/'
+sudo scp -p /etc/sudoers $USER@control2:/tmp/ && ssh -t control2 'sudo -S chown root:root /tmp/sudoers' && ssh -t control2 'sudo -S cp -p /tmp/sudoers /etc/'
+sudo scp -p /etc/sudoers $USER@control3:/tmp/ && ssh -t control3 'sudo -S chown root:root /tmp/sudoers' && ssh -t control3 'sudo -S cp -p /tmp/sudoers /etc/'
 #ssh control2 sudo -S sh -c "echo 'Defaults timestamp_type=global,timestamp_timeout=60' >> /etc/sudoers"
 #ssh control3 sudo -S sh -c "echo 'Defaults timestamp_type=global,timestamp_timeout=60' >> /etc/sudoers"
 
