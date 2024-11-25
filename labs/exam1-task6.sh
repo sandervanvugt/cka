@@ -18,12 +18,12 @@ TOTAL=$(( TOTAL + 10 ))
 
 ###testing if a networkpolicy was found
 #do we have a networkpolicy on the namespace restricted?
-if kubectl get netpol -n restricted &>/dev/null
+if kubectl get netpol lab156pol -n restricted &>/dev/null
 then
         echo -e "\033[32m[OK]\033[0m\t\t found a NetworkPolicy on the Namespace restricted"
         SCORE=$(( SCORE + 4 ))
 else
-        echo -e "\033[31m[FAIL]\033[0m\t\t previous revision of deploy updated not found or not using nginx:latest"
+        echo -e "\033[31m[FAIL]\033[0m\t\t NetworkPolicy not found on the Namespace restricted"
 fi
 TOTAL=$(( TOTAL + 4 ))
 
