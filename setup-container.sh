@@ -13,7 +13,7 @@ OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')
 
 sudo apt install -y jq
 
-if [ $MYOS = "Ubuntu" ]
+if [ $MYOS = "Ubuntu" ] || [ $MYOS = "Debian" ]
 then
 	### setting up container runtime prereq
 	cat <<- EOF | sudo tee /etc/modules-load.d/containerd.conf
