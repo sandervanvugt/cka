@@ -1,3 +1,5 @@
+# backendrefs is for upstream: traffic between the rout and the service
+# Terminate is what we need to terminate the session on the gateway
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

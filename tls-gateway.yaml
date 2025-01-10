@@ -1,0 +1,114 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"gateway.networking.k8s.io/v1","kind":"Gateway","metadata":{"annotations":{},"name":"example-gateway","namespace":"default"},"spec":{"gatewayClassName":"nginx","listeners":[{"name":"http","port":80,"protocol":"HTTP"}]}}
+  creationTimestamp: "2025-01-09T14:01:27Z"
+  generation: 4
+  name: example-gateway
+  namespace: default
+  resourceVersion: "74996"
+  uid: 9fc30e9b-1b23-45dd-b1bb-1cd20824ca95
+spec:
+  gatewayClassName: nginx
+  listeners:
+  - allowedRoutes:
+      namespaces:
+        from: Same
+    hostname: whatever.com
+    name: http
+    port: 80
+    protocol: HTTP
+  - allowedRoutes:
+      namespaces:
+        from: Same
+    hostname: whatever.com
+    name: https
+    port: 443
+    protocol: HTTPS
+    tls:
+      certificateRefs:
+      - group: ""
+        kind: Secret
+        name: gateway-tls
+      mode: Terminate
+status:
+  conditions:
+  - lastTransitionTime: "2025-01-10T13:24:02Z"
+    message: Gateway is accepted
+    observedGeneration: 4
+    reason: Accepted
+    status: "True"
+    type: Accepted
+  - lastTransitionTime: "2025-01-10T13:24:02Z"
+    message: Gateway is programmed
+    observedGeneration: 4
+    reason: Programmed
+    status: "True"
+    type: Programmed
+  listeners:
+  - attachedRoutes: 2
+    conditions:
+    - lastTransitionTime: "2025-01-10T13:24:02Z"
+      message: Listener is accepted
+      observedGeneration: 4
+      reason: Accepted
+      status: "True"
+      type: Accepted
+    - lastTransitionTime: "2025-01-10T13:24:02Z"
+      message: Listener is programmed
+      observedGeneration: 4
+      reason: Programmed
+      status: "True"
+      type: Programmed
+    - lastTransitionTime: "2025-01-10T13:24:02Z"
+      message: All references are resolved
+      observedGeneration: 4
+      reason: ResolvedRefs
+      status: "True"
+      type: ResolvedRefs
+    - lastTransitionTime: "2025-01-10T13:24:02Z"
+      message: No conflicts
+      observedGeneration: 4
+      reason: NoConflicts
+      status: "False"
+      type: Conflicted
+    name: http
+    supportedKinds:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+    - group: gateway.networking.k8s.io
+      kind: GRPCRoute
+  - attachedRoutes: 2
+    conditions:
+    - lastTransitionTime: "2025-01-10T13:24:02Z"
+      message: Listener is accepted
+      observedGeneration: 4
+      reason: Accepted
+      status: "True"
+      type: Accepted
+    - lastTransitionTime: "2025-01-10T13:24:02Z"
+      message: Listener is programmed
+      observedGeneration: 4
+      reason: Programmed
+      status: "True"
+      type: Programmed
+    - lastTransitionTime: "2025-01-10T13:24:02Z"
+      message: All references are resolved
+      observedGeneration: 4
+      reason: ResolvedRefs
+      status: "True"
+      type: ResolvedRefs
+    - lastTransitionTime: "2025-01-10T13:24:02Z"
+      message: No conflicts
+      observedGeneration: 4
+      reason: NoConflicts
+      status: "False"
+      type: Conflicted
+    name: https
+    supportedKinds:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+    - group: gateway.networking.k8s.io
+      kind: GRPCRoute
