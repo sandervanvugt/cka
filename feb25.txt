@@ -1,0 +1,96 @@
+    1  git clone https://github.com/sandervanvugt/cka
+    2  cd cka
+    3  ls
+    4  ./setup-container.sh 
+    5  systemctl status containerd
+    6  history
+    7  ls
+    8  ./setup-kubetools.sh
+    9  sudo kubeadm init
+   10  mkdir -p $HOME/.kube
+   11  kubectl get all
+   12  vim ~/.kube/config
+   13  kubectl config view
+   14  history
+   15  kubectl get pods -n kube-system
+   16  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   17  kubectl get pods -n kube-system
+   18  kubectl get nodes
+   19  history
+   20  kubectl kustomize https://github.com/nginxinc/nginx-gateway-fabric/config/crd/gatway-api/standard?ref=v1.5.1 | kubectl apply -f -
+   21  kubectl kustomize https://github.com/nginxinc/nginx-gateway-fabric/config/crd/gateway-api/standard?ref=v1.5.1 | kubectl apply -f -
+   22  helm install ngf oci://ghcr.io/nginxinc/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway
+   23  helm
+   24  snap install helm
+   25  sudo snap install helm
+   26  sudo snap install helm --classic
+   27  helm install ngf oci://ghcr.io/nginxinc/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway
+   28  kubectl get pods,svc -n nginx-gateway
+   29  kubectl get gc
+   30  source <(kubectl completion bash)
+   31  kubectl edit -n nginx-gateway svc ngf-nginx-gateway-fabric 
+   32  kubectl create deploy nginxgw --image=nginx --replicas=3
+   33  kubectl expose deploy nginxgw --port=80
+   34  kubectl get endpoints
+   35  vim http-routing.yaml 
+   36  kubectl apply -f http-routing.yaml 
+   37  sudo vim /etc/hosts
+   38  kubectl -n nginx-gateway port-forward pods/ngf-nginx-gateway-fabric-cdc5dfc94-62l6x 8080:80 8443:443
+   39  bg
+   40  curl whatever.com:8080
+   41  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=whatever.com"
+   42  kubectl create secret tls gateway-tls --cert=tls.crt --key=tls.key
+   43  vim tls-gateway.yaml 
+   44  kubectl apply -f tls-gateway.yaml 
+   45  vim tls-gateway.yaml 
+   46  kubectl apply -f tls-gateway.yaml 
+   47  vim https-routing.yaml 
+   48  kubectl apply -f https-routing.yaml 
+   49  sudo apt install socat
+   50  sudo socat TCP4-LISTEN:80,fork TCP4:127.0.0.1:32080 &
+   51  sudo socat TCP4-LISTEN:443,fork TCP4:127.0.0.1:32443 &
+   52  curl -k https://whatever.com
+   53  ./counter.sh 12
+   54  vim tls-gateway.yaml 
+   55  history
+   56  kubectl create quota qtest --help | less
+   57  #kubectl create quota qtest --hard pods=3,cpu=100m,memory=500Mi --namespace limited
+   58  kubectl create ns limited
+   59  kubectl create quota qtest --hard pods=3,cpu=100m,memory=500Mi --namespace limited
+   60  kubectl describe ns limited 
+   61  kubectl create deploy nginx --image=nginx:latest --replicas=3 -n limited
+   62  kubectl get all -n limited
+   63  kubectl describe -n limited rs nginx-54c98b4f84 
+   64  kubectl set resources deploy nginx --requests cpu=100m,memory=5Mi --limits cpu=200m,memory=200Mi -n limited
+   65  kubectl get pods -n limited
+   66  kubectl describe ns limited 
+   67  kubectl edit quota -n limited 
+   68  kubectl describe ns limited 
+   69  kubectl explain limitrange.spec
+   70  kubectl explain limitrange.spec.limits
+   71  kubectl get ns
+   72  vim limitrange.yaml 
+   73  kubectl get quota -n limited 
+   74  kubectl delete quota -n limited
+   75  kubectl delete quota qtest -n limited
+   76  kubectl apply -f limitrange.yaml -n limited 
+   77  kubectl describe ns limited
+   78  kubectl run limitpod --image=nginx -n limited
+   79  kubectl describe pod limitpod -n limiteds
+   80  kubectl describe pod limitpod -n limited
+   81  kubectl cordon worker1
+   82  kubectl edit node worker1
+   83  kubectl uncordon worker1
+   84  kubectl edit node control
+   85  kubectl get nodes
+   86  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+   87  kubectl get pods -n kube-system 
+   88  kubectl edit deploy -n kube-system metrics-server 
+   89  kubectl get pods -n kube-system 
+   90  kubectl top pods
+   91  kubectl create deploy webstress --image=nginx
+   92  kubectl autoscale deploy webstress --min=2 --max=3 --cpu-percent=80
+   93  kubectl get hpa
+   94  kubectl autoscale deploy webstress --min=2 --max=5 --cpu-percent=80
+   95  kubectl get deploy webstress 
+   96  history > /tmp/feb25.txt
