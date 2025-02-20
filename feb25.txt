@@ -94,3 +94,195 @@
    94  kubectl autoscale deploy webstress --min=2 --max=5 --cpu-percent=80
    95  kubectl get deploy webstress 
    96  history > /tmp/feb25.txt
+   97  kubectl edit deploy -n kube-system metrics-server 
+   98  helm
+   99  helm repo add argo https://argoproj.github.io/argo-helm
+  100  helm repo update
+  101  helm search repo argo/argo-cd
+  102  helm template my-argo-cd argo/argo-cd --version 7.8.3 > argo-cd-template.yaml
+  103  vim argo-cd-template.yaml 
+  104  helm show values argo/argo-cd > values.yaml
+  105  vim values.yaml 
+  106  helm template my-argocd argo/argo-cd -f values.yaml > argo-cd-template.yaml
+  107  kubectl apply -f argo-cd-template.yaml 
+  108  kubectl get svc
+  109  vim nwpolicy-complete-example.yaml 
+  110  kubectl apply -f nwpolicy-complete-example.yaml 
+  111  kubectl expose pod nginx --port=80
+  112  kubectl exec -it busybox -- wget --spider --timeout=1
+  113  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  114  kubectl get svc
+  115  kubectl get nwp
+  116  kubectl get netpol
+  117  kubectl describe netpol access-nginx 
+  118  kubectl label pod busybox access=true
+  119  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  120  history
+  121  kubectl create ns nwp-namespace
+  122  vim nwp-lab10-1.yaml 
+  123  kubectl create -f nwp-lab10-1.yaml 
+  124  kubectl expose pod nwp-nginx --port=80
+  125  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx
+  126  kubectl exec -it nwp-busybox -n nwp-namespace -- nslookup nwp-nginx
+  127  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  128  vim nwp-lab10-2.yaml 
+  129  kubectl apply -f nwp-lab10-2.yaml 
+  130  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  131  kubectl create deploy busybox --image=busybox -- sleep 3600
+  132  kubectl exec -it busybox-5c684d4858-9ckll -- wget --spider --timeout=1 nwp-nginx
+  133  kubectl exec -it busybox-5c684d4858-9ckll -- cat /etc/resolv.conf
+  134  kubectl cluster-info
+  135  kubectl cluster-info dump | less
+  136  history
+  137  kubectl delete netpol access-nginx 
+  138  kubectl delete netpol deny-from-other-namespaces 
+  139  kubectl create ns restricted
+  140  kubectl run -h | less
+  141  kubectl run nginx --image=nginx -n restricted
+  142  kubectl -n restricted expose pod nginx
+  143  kubectl -n restricted expose pod nginx --port=80
+  144  kubectl get pods
+  145  kubectl get pods --show-labels
+  146  history
+  147  kubectl delete -f argo-cd-template.yaml 
+  148  vim apiVersion: networking.k8s.io/v1
+  149  kind: NetworkPolicy
+  150  metadata:
+  151  spec:
+  152  vim netpol.yaml
+  153  kubectl get pods -n restricted --show-labels
+  154  vim netpol.yaml
+  155  kubectl get ns --show-labels
+  156  vim netpol.yaml
+  157  kubectl expose -n restricted nginx --port=80
+  158  kubectl expose -n restricted pod nginx --port=80
+  159  kubectl get pods
+  160  history | grep wget
+  161  kubectl exec -it busybox -- wget --spider --timeout=1 nginx.restricted.svc.cluster.local
+  162  kubectl get netpol -n restricted
+  163  kubectl apply -f netpol.yaml 
+  164  vim netpol.yaml 
+  165  kubectl apply -f netpol.yaml 
+  166  kubectl exec -it busybox -- wget --spider --timeout=1 nginx.restricted.svc.cluster.local
+  167  kubectl label pod busybox access-
+  168  kubectl label pod busybox access="yes"
+  169  kubectl get pods --show-labels
+  170  kubectl exec -it busybox -- wget --spider --timeout=1 nginx.restricted.svc.cluster.local
+  171  history
+  172  cat netpol.yaml 
+  173  kubectl describe node worker1 
+  174  kubectl top node
+  175  kubectl top pods
+  176  kubectl get pods -n kube-system 
+  177  cd /etc/kubernetes/manifests/
+  178  ls
+  179  vim kube-apiserver.yaml 
+  180  sudo vim kube-apiserver.yaml 
+  181  cd
+  182  kubectl run staticpod --image=nginx --dry-run=client -o yaml
+  183  kubectl get pods
+  184  ps aux | grep kubelet
+  185  sudo vim /var/lib/kubelet/config.yaml
+  186  kubectl top pods
+  187  sudo apt install etcd-client
+  188  sudo etcdctl --help
+  189  ls /etc/pki/
+  190  ls /etc/kubernetes/pki/etcd/
+  191  ps aux | grep etcd
+  192  sudo etcdctl --endpoint=localhost:2379 --cacert /etc/kubernetes/pki/etc/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etc/server.key get / --prefix --keys-only
+  193  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etc/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etc/server.key get / --prefix --keys-only
+  194  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key get / --prefix --keys-only
+  195  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key snapshot save /tmp/etcdbackup.db
+  196  ls -l /tmp/etcdbackup.db 
+  197  sudo etcdctl --write-out=table snapshot status /tmp/etcdbackup.db 
+  198  cp /tmp/etcdbackup.db /tmp/etcdbackup.db.bak
+  199  sudo cp /tmp/etcdbackup.db /tmp/etcdbackup.db.bak
+  200  kubectl get deploy
+  201  kubectl delete deploy busybox nginxgw webstress 
+  202  cd /etc/kubernetes/manifests/
+  203  ls
+  204  sudo mv * ..
+  205  ls
+  206  sudo crictl ps
+  207  sudo mv /var/lib/etcd /var/lib/etcd-backup
+  208  sudo etcdctl snapshot restore /tmp/etcdbackup.db --data-dir /var/lib/etcd
+  209  sudo ls -l /var/lib/etcd
+  210  sudo ls -l /var/lib/etcd/member
+  211  cd ..
+  212  cd manifests/
+  213  ls
+  214  sudo mv ../*.yaml .
+  215  sudo crictl ps
+  216  kubectl get deploy
+  217  sudo apt update
+  218  sudo apt-cache madison kubeadm
+  219  kubectl get  nodes
+  220  cd
+  221  cd cka/
+  222  vim selector-pod.yaml 
+  223  kubectl apply -f selector-pod.yaml 
+  224  vim selector-pod.yaml 
+  225  kubectl apply -f selector-pod.yaml 
+  226  kubectl get pods
+  227  kubectl describe pod nginxabc 
+  228  kubectl label nodes worker2 disktype=ssd
+  229  kubectl get pods
+  230  history
+  231  kubectl get nodes
+  232  kubectl get pods -o wide
+  233  kubectl describe node worker1
+  234  kubectl create deploy taintet --image=nginx --replicas=10
+  235  kubectl get pods -o wide
+  236  kubectl get nodes
+  237  kubectl describe node worker1 | less
+  238  kubectl edit node worker1
+  239  kubectl describe node worker1 | less
+  240  kubectl taint nodes worker1 storage=ssd:NoSchedule
+  241  kubectl describe nodes worker1 | less
+  242  kubectl create deploy nginx-taint --image=nginx --replicas=3
+  243  kubectl get pods -o wide
+  244  kubectl delete deploy taintet 
+  245  kubectl delete deploy nginx-taint
+  246  vim taint-toleration.yaml 
+  247  kubectl get pods -o wide
+  248  kubectl create -f taint-toleration.yaml 
+  249  kubectl get pods -o wide
+  250  kubectl delete -f taint-toleration.yaml 
+  251  kubectl create deploy taintet --image=nginx --replicas=10
+  252  kubectl get pods -o wide
+  253* kubectl create -f taint-toleration.yaml 
+  254  kubectl get pods -o wide | grep toler
+  255  vim taint-toleration2.yaml 
+  256  kubectl apply -f taint-toleration2.yaml 
+  257  kubectl get pods -o wide | grep toler
+  258  kubectl get pods -o wide | grep hdd
+  259  kubectl edit node worker1
+  260  kubectl get pod -o wide
+  261  kubectl create role --help | less
+  262  kubectl create ns roles
+  263  kubectl create role --help | less
+  264  kubectl create role viewer --verb=get --verb=list --verb=watch --resource=pods -n roles
+  265  kubectl get pods nginx -o yaml | less
+  266  kubectl create sa viewers -n roles
+  267  kubectl create rolebinding --help | less
+  268  #  kubectl create rolebinding admin-binding --role=admin --serviceaccount=monitoring:sa-dev
+  269  kubectl create rolebinding viewers --role-viewer --serviceaccount=roles:viewers -n roles
+  270  kubectl create rolebinding viewers --role=viewer --serviceaccount=roles:viewers -n roles
+  271  kubectl run viewpod --image=nginx --dry-run=client -o yaml
+  272  vim viewoid.yaml
+  273  kubectl apply -f viewoid.yaml 
+  274  vim viewoid.yaml
+  275  kubectl apply -f viewoid.yaml 
+  276  kubectl get pods viewpod -n roles -o yaml | less
+  277  kubectl describe -n roles rolebindings.rbac.authorization.k8s.io 
+  278  kubectl run mypod --image=alpine -- sleep 3600
+  279  kubectl get pods mypod -o yaml
+  280  kubectl exec -it mypod -- sh
+  281  kubectl create sa mysa
+  282  kubectl create role list-pods --resource=pods --verb=list
+  283  kubectl create rolebinding list-pods --role=list-pods --serviceaccount=default:mysa
+  284  cat mysapod.yaml 
+  285  kubectl apply -f mysapod.yaml 
+  286  kubectl exec -it mysapod -- sh
+  287  history
+  288  history > /tmp/feb25.txt
