@@ -9,7 +9,7 @@ fi
 TOTAL=$(( TOTAL + 10 ))
 
 # check for the rolebinding to be set correctly
-if kubectl get -n access rolebinding -o yaml | grep lab1510role &>/dev/null && kubectl get -n access rolebinding -o yaml | grep lab1510access &>/dev/null
+if kubectl get -n access rolebinding -o yaml | grep role1510 &>/dev/null && kubectl get -n access rolebinding -o yaml | grep lab1510access &>/dev/null
 then
 	echo -e "\033[32m[OK]\033[0m\t\t rolebinding is set up the right way"
 	SCORE=$(( SCORE + 10 ))
