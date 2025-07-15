@@ -1,0 +1,135 @@
+    1  sudo apt install -y git vim
+    2  git clone https://github.com/sandervanvugt/cka
+    3  cd cka
+    4  ls *sh
+    5  vim setup-container-previous-version
+    6  vim setup-container-previous-version.sh
+    7  sudo ./setup-container-previous-version.sh 
+    8  history
+    9  ls *sh
+   10  sudo ./setup-kubetools-previousversion.sh 
+   11  history
+   12  sudo kubeadm init
+   13  mkdir -p $HOME/.kube
+   14  kubectl get all
+   15  kubectl get pods -n kube-system
+   16  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   17  kubectl get pods -n kube-system
+   18  kubectl get nodes
+   19  history
+   20  kubectl create deploy test --image=nginx --replicas=3
+   21  kubectl get all
+   22  kubectl completion -h
+   23  source <(kubectl completion bash)
+   24  kubectl api-resources | less
+   25  kubectl create ns limited
+   26  kubectl create quota --help | less
+   27  kubectl create quota qtest --hard pods=3,cpu=100m,memory=500Mi -n limited
+   28  kubectl describe quota -n limited
+   29  kubectl create deploy nginx --image=nginx --replicas=3 -n limited
+   30  kubectl get all -n limited
+   31  kubectl describe -n limited rs nginx-5869d7778c 
+   32  kubectl set -h | less
+   33  kubectl set resources -n limited deploy nginx --requests cpu=100m,memory=5Mi --limits cpu=200m,memory=20Mi
+   34  kubectl get pods -n limited 
+   35  kubectl describe -n limited quota
+   36  kubectl edit -n limited quota qtest
+   37  kubectl get all -n limited
+   38  kubectl scale -n limited deployment nginx --replicas=2
+   39  kubectl scale -n limited deployment nginx --replicas=3
+   40  kubectl get all -n limited
+   41  history
+   42  kubectl explain limitrange.spec
+   43  kubectl explain limitrange.spec.limits
+   44  kubectl create ns limited
+   45  vim limitrange.yaml 
+   46  kubectl delete quota qtest -n limited
+   47  kubectl apply -f limitrange.yaml -n limited
+   48  kubectl describe ns limited
+   49  kubectl run limitpod --image=nginx -n limited
+   50  kubectl get pods
+   51  kubectl get pods -n limited
+   52  kubectl describe pod limitpod -n limited
+   53  history
+   54  kubectl create ns restricted
+   55  kubectl create quota -h | less
+   56  #kubectl create quota my-quota --hard=cpu=1,memory=1G,pods=2,services=3,replicationcontrollers=2,resourcequotas=1,secrets=5,persistentvolumeclaims=10
+   57  kubectl create -n restricted rquota --hard=memory=1G,pods=3
+   58  kubectl create -n restricted quota rquota --hard=memory=1G,pods=3
+   59  kubectl create -n restricted deploy task7deploy --image=nginx --replicas=3
+   60  kubectl set resources -h | less
+   61  #kubectl set resources deployment nginx -c=nginx --limits=cpu=200m,memory=512Mi
+   62  kubectl -n restricted set resources deploy task7deploy --limits=memory=128Mi
+   63  kubectl get all -n restricted
+   64  kubectl run busy --image=busybox -n restricted
+   65  kubectl run busy --image=busybox -n restricted --dry-run=client -o yaml > busy.yaml
+   66  kubectl edit deploy task7deploy -n restricted
+   67  vim busy.yaml 
+   68  kubectl apply -f busy.yaml 
+   69  history
+   70  kubectl get pods -n kube-system -o wide
+   71  ps aux | grep kubelet
+   72  systemctl status kubelet
+   73  ps aux |  grep containerd
+   74  systemctl status containerd
+   75  sudo crictl ps
+   76  sudo vim /etc/crictl.yaml 
+   77  sudo crictl ps -a
+   78  sudo crictl logs 89c71b33d194e
+   79  history
+   80  kubectl get nodes
+   81  kubectl cordon worker1
+   82  kubectl create deploy --image=nginx --replicas=7
+   83  kubectl create deploy myweb --image=nginx --replicas=7
+   84  kubectl get pods -o wide
+   85  kubectl get nodes
+   86  kubectl uncordon worker1
+   87  kubectl get pods -o wide
+   88  kubectl scale deployment myweb --replicas=1
+   89  kubectl scale deployment myweb --replicas=7
+   90  kubectl get pods -o wide
+   91  kubectl drain worker1
+   92  kubectl drain worker1 --ignore-daemonsets
+   93  kubectl get nodes
+   94  kubectl describe node worker1
+   95  kubectl uncordon worker1
+   96  kubectl delete deploy myweb
+   97  helm
+   98  sudo snap install helm
+   99  sudo snap install helm --classic
+  100  helm repo add argo https://argoproj.github.io/argo-helm
+  101  helm repo update
+  102  helm search repo argo/argo-cd
+  103  helm template my-argo-cd argo/argo-cd --version 8.1.3 > argo-cd-template.yaml
+  104  vin argo-cd-template.yaml 
+  105  vim argo-cd-template.yaml 
+  106  helm show values argo/argo-cd > values.yaml
+  107  vim values.yaml
+  108  helm template my-argocd argo/argo-cd -f values.yaml > argo-cd-template.yaml
+  109  kubectl get all
+  110  kubectl apply -f argo-cd-template.yaml 
+  111  helm --help | less
+  112  vim nwpolicy-complete-example.yaml 
+  113  kubectl apply -f nwpolicy-complete-example.yaml 
+  114  kubectl expose pod nginx --port=80
+  115  kubectl get pods,svc
+  116  kubectl delete -f argo-cd-template.yaml 
+  117  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  118  kubectl describe netpol
+  119  kubectl get pods --show-labels
+  120  kubectl label pod busybox access=true
+  121  kubectl describe netpol
+  122  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  123  kubectl create ns nwp-namespace
+  124  vim nwp-lab10-1.yaml 
+  125  kubectl create -f nwp-lab10-1.yaml 
+  126  kubectl expose pod nwp-nginx --port=80
+  127  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx
+  128  kubectl exec -it nwp-busybox -n nwp-namespace -- nslookup nwp-nginx
+  129  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  130  vim nwp-lab10-2.yaml 
+  131  kubectl create -f nwp-lab10-2.yaml 
+  132  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  133  kubectl create deploy busybox --image=busybox -- sleep 3600
+  134  kubectl exec -it busybox-5c684d4858-rkcx9 -- wget --spider --timeout=1 nwp-nginx
+  135  history > /tmp/july25.txt
