@@ -2,7 +2,7 @@
 # kubeadm installation instructions as on
 # https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
-# this script supports Ubuntu 20.04 LTS and later only
+# this script supports Ubuntu 22.04 LTS and later only
 # run this script with sudo
 
 #if ! [ $USER = root ]

@@ -2,7 +2,7 @@
 # kubeadm installation instructions as on
 # https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
-# this script supports Ubuntu 20.04 LTS and later only
+# this script supports Ubuntu 22.04 LTS and later only
 # run this script with sudo
 
 if ! [ -f /tmp/container.txt ]
@@ -16,6 +16,8 @@ MYOS=$(hostnamectl | awk '/Operating/ { print $3 }')
 OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')
 
 # detecting latest Kubernetes version
+# installing jq if required
+which jq || apt install -y jq
 KUBEVERSION=$(curl -s https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r '.tag_name')
 KUBEVERSION=${KUBEVERSION%.*}
 
