@@ -133,3 +133,141 @@
   133  kubectl create deploy busybox --image=busybox -- sleep 3600
   134  kubectl exec -it busybox-5c684d4858-rkcx9 -- wget --spider --timeout=1 nwp-nginx
   135  history > /tmp/july25.txt
+  136  dpkg =l
+  137  dpkg -l
+  138  dpkg -l | grep jq
+  139  kubectl create ns restricted
+  140  kubectl create ns resticted
+  141  vim resticted.yaml
+  142  kubectl create deploy nginx --image=nginx -n resticted 
+  143  vim resticted.yaml
+  144  kubectl get ns --show-labels
+  145  vim resticted.yaml
+  146  kubectl apply -f resticted.yaml 
+  147  vim resticted.yaml
+  148  kubectl apply -f resticted.yaml 
+  149  vim resticted.yaml
+  150  kubectl expose -n resticted deployment nginx --port=80
+  151  kubectl run rpod --image=busybox -- sleep infinity
+  152  kubectl get pods
+  153  kubectl exec -it rpod -- wget --spider --timeout=1 nginx.svc.resticted.cluster.local
+  154  kubectl exec -it rpod -- wget --spider --timeout=1 nginx.resticted.svc.cluster.local
+  155  vim resticted.yaml
+  156  kubectl label -n resticted pod nginx-5869d7778c-6tb7c access="yes"
+  157* kubectl exec -it r
+  158  kubectl label pod rpod access="yes"
+  159  kubectl exec -it rpod -- wget --spider --timeout=1 nginx.resticted.svc.cluster.local
+  160  history
+  161  cat resticted.yaml 
+  162  kubectl top pods
+  163  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  164  kubectl -n kube-system get pods
+  165  kubectl logs -n kube-system metrics-server-867d48dc9c-hlslg 
+  166  kubectl edit -n kube-system deployments.apps metrics-server 
+  167  kubectl -n kube-system get pods
+  168  kubectl top pods -A
+  169  history
+  170  kubectl create deploy webstress --image=nginx
+  171  kubectl autoscale -h | less
+  172  kubectl autoscale deploy webstress --min=2 --max=5 --cpu=percent=80
+  173  kubectl autoscale deploy webstress --min=2 --max=5 --cpu-percent=80
+  174  kubectl get hpa
+  175  kubectl get deploy webstress 
+  176  kubectl explain hpa.spec
+  177  kubectl explain hpa.spec.behavior
+  178  kubectl explain hpa.spec.behavior.scaleDown
+  179  kubectl edit hpa
+  180  sudo -i
+  181  kubectl run auto-web --image=nginx --dry-run=client -o yaml
+  182  kubectl get pods -o wide
+  183  history
+  184  sudo apt install etcd-client
+  185  sudo etcdctl --help | less
+  186  ps aux | grep etcd
+  187  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key get / --prefix --keys-only
+  188  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key snapshot save /tmp/etcdbackup.db
+  189  ls -l /tmp/etcdbackup.db 
+  190  etcdctl --write-out=table snapshot status /tmp/etcdbackup.db 
+  191  sudo etcdctl --write-out=table snapshot status /tmp/etcdbackup.db 
+  192  history
+  193  kubectl get deploy
+  194  kubectl delete deploy --all
+  195  cd /etc/kubernetes/manifests/
+  196  ls
+  197  sudo mv * ..
+  198  sudo crictl ps
+  199  sudo mv /var/lib/etcd /var/lib/etcd-backup
+  200  sudo etcdctl snapshot restore /tmp/etcdbackup.db --data-dir /var/lib/etcd
+  201  ls -l /var/lib/etcd
+  202  sudo ls -l /var/lib/etcd
+  203  sudo mv ../*.yaml .
+  204  sudo crictl ps
+  205  kubectl get deploy
+  206  history
+  207  cd
+  208  kubectl describe node control | less
+  209  kubectl label node worker2 disktype=ssd
+  210  cd cka/
+  211  vim selector-pod.yaml 
+  212  kubectl delete pod --all
+  213  kubectl apply -f selector-pod.yaml 
+  214  kubectl get pods
+  215  kubectl describe pod nginx 
+  216  kubectl delete -f selector-pod.yaml 
+  217  vim selector-pod.yaml 
+  218  kubectl apply -f selector-pod.yaml 
+  219  kubectl get pods
+  220  kubectl get pods -o wide
+  221  kubectl get nodes
+  222  kubectl describe node worker1
+  223  kubectl edit node worker1
+  224  kubectl describe node worker1 | less
+  225  kubectl taint nodes worker1 storage=ssd:NoSchedule
+  226  kubectl describe nodes worker1 | less
+  227  kubectl get nodes -o wide
+  228  kubectl create deploy nginx-taint --image=nginx --replicas=5
+  229  kubectl get pods -o wide
+  230  vim taint-toleration.yaml 
+  231  kubectl apply -f taint-toleration.yaml 
+  232  kubectl get pods tolerator -o wide
+  233  vim taint-toleration.yaml 
+  234  kubectl apply -f taint-toleration.yaml 
+  235  kubectl get pods toleratoro -o wide
+  236  vim taint-toleration2.yaml 
+  237  kubectl apply -f taint-toleration2.yaml 
+  238  kubectl get pods nginx-hdd -o wide
+  239  history
+  240  kubectl kustomize "https://github.com/nginx/nginx-gateway-fabric/config/crd/gateway-api/standard?ref=v1.6.2" | kubectl apply -f -
+  241  helm install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway
+  242  kubectl get pods,svc -n nginx-gateway 
+  243  kubectl get gc
+  244  kubectl edit -n nginx-gateway svc ngf-nginx-gateway-fabric 
+  245  kubectl get svc -n nginx-gateway 
+  246  kubectl create deploy nginxgw --image=nginx --replicas=3
+  247  kubectl expose deploy nginxgw --port=80
+  248  vim http-routing.yaml 
+  249  kubectl apply -f http-routing.yaml 
+  250  sudo sh -c "echo 127.0.0.1 whatever.com >> /etc/hosts"
+  251  kubectl -n nginx-gateway port-forward pods/ngf-nginx-gateway-fabric-6b4dfbbf6-vxqwd 8080:80 8443:443
+  252  bg
+  253  curl whatever.com:8080
+  254  ip a
+  255  sudo vim /etc/hosts
+  256  kubectl get svc -n nginx-gateway
+  257  curl whatever.com:32080
+  258  history
+  259  kubectl edit -n nginx-gateway svc ngf-nginx-gateway-fabric 
+  260  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=whatever.com"
+  261  kubectl create secret tls gateway-tls --cert=tls.crt --key=tls.key
+  262  vim tls-gateway.yaml 
+  263  history | grep yaml
+  264  kubectl delete -f http-routing.yaml 
+  265  kubectl apply -f tls-gateway.yaml 
+  266  vim https-routing.yaml 
+  267  kubectl apply -f https-routing.yaml 
+  268  sudo apt install socat
+  269  sudo socat TCP4-LISTEN:80,fork TCP4:127.0.0.1:32080 &
+  270  sudo socat TCP4-LISTEN:443,fork TCP4:127.0.0.1:32443 &
+  271  curl -k https://whatever.com
+  272  curl http://whatever.com
+  273  history > /tmp/july25.txt
