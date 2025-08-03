@@ -1,2 +1,5 @@
 ON DEMAND COURSE
 *	Certified Kubernetes Administrator (CKA) 4th edition: https://learning.oreilly.com/course/certified-kubernetes-administrator/9780135375129/
+
+30% DISCOUNT ON THE EXAM
+*	Use the coupon code SANDER30 to get 30% off the regular exam price. Book here to use it: https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/?source=aw&sv1=affiliate&sv_campaign_id=1937207&awc=85919_1754216444_cfaa875696447a4f19cca5558d7f96cf
