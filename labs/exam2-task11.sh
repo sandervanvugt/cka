@@ -1,4 +1,4 @@
-if sudo etcdctl --write-out=table snapshot status /tmp/etcdbackup &>/dev/null
+if sudo ETCDCTL_API=3 etcdctl --write-out=table snapshot status /tmp/etcdbackup &>/dev/null
 then
 	echo -e "\033[32m[OK]\033[0m\t\t a valid etcd backup was found"
 	SCORE=$(( SCORE + 10 ))
