@@ -1,0 +1,124 @@
+    1  sudo apt install -y vim git
+    2  git clone https://github.com/sandervanvugt/cka
+    3  cd cka
+    4  ls *sh
+    5  ./setup-container.sh 
+    6  systemctl status containerd
+    7  vim setup-container.sh 
+    8  cd /etc/sysctl.d/
+    9  ls
+   10  cat 99-kubernetes-cri.conf 
+   11  cd 
+   12  cd cka
+   13  ls *
+   14  ls *sh
+   15  ./setup-kubetools-previousversion.sh 
+   16  sudo kubeadm init -h | less
+   17  sudo kubeadm init
+   18  mkdir -p $HOME/.kube
+   19  less ~/.kube/config 
+   20  kubectl get all
+   21  ls
+   22  less RESOURCES.txt 
+   23  kubectl config view
+   24  kubectl get pods -n kube-system
+   25  kubectl describe -n kube-system pod coredns-674b8bbfcf-fbkd8
+   26  history
+   27  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   28  kubectl api-resources | less
+   29  kubectl get pods -n kube-system
+   30  history
+   31  kubectl get nodes
+   32  kubectl create deploy testdploy --image=nginx --replicas=3
+   33  kubectl get all 
+   34  sudo kubeadm config print init-defaults > config.yaml
+   35  vim config.yaml 
+   36  source <(kubectl completion bash)
+   37  kubectl get pods -n kube-system 
+   38  kubectl edit node control
+   39  kubectl create deploy removeme --image=nginx --replicas=20
+   40  kubectl get all
+   41  kubectl get pods -o wide
+   42  kubectl edit node control
+   43  kubectl get pods -o wide
+   44  kubectl scale deploy removeme --replicas=1
+   45  kubectl scale deploy removeme --replicas=20
+   46  kubectl get pods -o wide
+   47  kubectl delete deploy removeme 
+   48  history | grep create
+   49  kubectl get all
+   50  kubectl edit deploy testdploy 
+   51  kubectl get pods -o wide
+   52  kubectl expose deploy testdploy 
+   53  kubectl expose deploy testdploy --port 80
+   54  kubectl get all
+   55  curl 10.104.105.141
+   56  kubectl get all
+   57  kubectl edit svc testdploy 
+   58  kubectl get all
+   59  history
+   60  kubectl set resources -h | less
+   61  kubectl get deploy 
+   62  kubectl set resources deploy testdploy --limits=cpu=200m,memory=512Mi --requests=cpu=100m,memory=256Mi
+   63  source <(kubectl completion bash)
+   64  kubectl edit deploy testdploy 
+   65  kubectl create ns limited
+   66  kubectl create quota -h | less
+   67  kubectl create quota qtest --hard pods=3,cpu=100m,memory=500Mi --namespace limited
+   68  kubectl describe quota -n limited 
+   69  kubectl describe quota 
+   70  kubectl describe ns limited 
+   71  kubectl create deploy nginx --image=nginx --replicas=3 -n limited
+   72  kubectl get all -n limited
+   73  kubectl describe -n limited rs nginx-5869d7778c 
+   74  history
+   75  kubectl set resources -n limited deploy nginx --requests cpu=100m,memory=5Mi --limits cpu=200m,memory=20Mi
+   76  kubectl get pods -n limited
+   77  kubectl get all -n limited
+   78  kubectl describe ns limited 
+   79  kubectl edit -n limited quota qtest 
+   80  kubectl get all -n limited
+   81  kubectl -n limited scale deploy nginx --replicas=1
+   82  kubectl -n limited scale deploy nginx --replicas=3
+   83  kubectl get all -n limited 
+   84  vim limitrange.yaml 
+   85  kubectl apply -f limitrange.yaml 
+   86  kubectl describe ns limited 
+   87  cat limitrange.yaml 
+   88  kubectl describe ns default
+   89  kubectl delete -f limitrange.yaml 
+   90  kubectl apply -f limitrange.yaml -n limited
+   91  kubectl describe ns limited 
+   92  kubectl run limitpod --image=nginx -n limited
+   93  kubectl delete quota -n limited qtest 
+   94  kubectl run limitpod --image=nginx -n limited
+   95  kubectl describe pod -n limited limitpod 
+   96  history
+   97  kubectl create priorityclass high-priority --value=1000 --description="high priority" --preemption-policy="Never"
+   98  kubectl create priorityclass high-priority --value=125 --description="mid priority" --global-default=true
+   99  kubectl create priorityclass mid-priority --value=125 --description="mid priority" --global-default=true
+  100  kubectl run testpod --image=nginx
+  101  kubectl get testpod -o yaml | grep -B2 -i priority
+  102  kubectl get pod testpod -o yaml | grep -B2 -i priority
+  103  kubectl create deploy highprio --image=nginx
+  104  kubectl edit deploy highprio
+  105  kubectl get all --selector app=highprio
+  106  kubectl get pods highprio-57ccd94998-ddjjl -o yaml | grep prio
+  107  history
+  108  kubectl create quota -h | less
+  109  kubectl run -h | less
+  110  kubectl run busypod --image=busybox -- sleep 3600
+  111  kubectl get pods
+  112  kubectl get pod busypod -o yaml | less
+  113  kubectl get ds -A
+  114  kubectl get nodes
+  115  kubectl cordon worker1
+  116  kubectl create deploy many --image=nginx --replicas=10
+  117  kubectl get pods -o wide
+  118  kubectl uncordon worker1
+  119  kubectl get pods -o wide
+  120  kubectl scale deploy many --replicas=4
+  121  kubectl scale deploy many --replicas=10
+  122  kubectl get pods -o wide
+  123  kubectl delete deploy many
+  124  history > /tmp/oct25.txt
