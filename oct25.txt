@@ -122,3 +122,199 @@
   122  kubectl get pods -o wide
   123  kubectl delete deploy many
   124  history > /tmp/oct25.txt
+  125  cd
+  126  arch
+  127  kubectl cordon worker2 
+  128  kubectl get nodes
+  129  kubectl get node worker2 -o yaml | less
+  130  df -h
+  131  kubectl create deploy filledup --image=nginx --replicas=5
+  132  kubectl get all --selector app=filledup
+  133  kubectl describe pod filledup-689c9df88d-vrxrq 
+  134  kubectl edit node worker2 
+  135  kubectl edit node worker1
+  136  kubectl get pods
+  137  kubectl get nodes
+  138  kubectl uncordon worker2
+  139  kubectl get nodes
+  140  kubectl get pods -n kube-system 
+  141  kubectl get nodes
+  142  helm
+  143  snap install helm
+  144  sudo snap install helm
+  145  sudo snap install helm --classic
+  146  helm version
+  147  helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+  148  helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+  149  kubectl get ns
+  150  kubectl get all -n kubernetes-dashboard 
+  151  kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
+  152  helm repo add bitnami https://charts.bitnami.com/bitnami
+  153  helm repo list
+  154  helm search repo bitnami
+  155  helm search repo file
+  156  helm search repo nginx --versions
+  157  helm install bitnami/mysql --generate-name --create-namespace --namespace bsql
+  158  helm show chart bitnami/mysql
+  159  helm list -A
+  160  helm status mysql-1761834656
+  161  helm status mysql-1761834656 -n bsql
+  162  kubectl -n bsql
+  163  kubectl get all -n bsql
+  164  kubectl describe pods -n bsql mysql-1761834656-0 
+  165  helm repo list
+  166  helm show values bitnami/nginx
+  167  helm show values bitnami/nginx | grep commonLa
+  168  helm show values bitnami/nginx | grep replicaC
+  169  vim values.yaml
+  170  helm list
+  171  helm install bitnami/nginx --generate-name --values=values.yaml
+  172  helm list
+  173  kubectl get deploy
+  174  helm get values nginx-1761835222
+  175  helm get values --all nginx-1761835222
+  176  helm get values --all nginx-1761835222 | wc -l
+  177  helm repo add argo https://argoproj.github.io/argo-helm
+  178  helm repo update
+  179  helm search repo argo/argo-cd
+  180  helm template my-argo-cd argo/argo-cd > argo-cd-template.yaml
+  181  vim argo-cd-template.yaml 
+  182  helm show values argo/argo-cd > values.yaml
+  183  vim values.yaml
+  184  helm template my-argocd argo/argo-cd -f values.yaml > argo-cd-template.yaml
+  185  kubectl apply -f argo-cd-template.yaml 
+  186  kubectl get svc
+  187  kubectl delete -f argo-cd-template.yaml 
+  188  kubectl get storageclass
+  189  cd cka
+  190  ls
+  191  vim pvc.yaml 
+  192  kubectl apply -f pvc.yaml
+  193  kubectl get pvc
+  194  kubectl describe pvc pv-claim 
+  195  ls pv*
+  196  vim pv.yaml 
+  197  kubectl apply -f pv.yaml 
+  198  kubectl get pvc
+  199  kubectl explain pvc.spec | less
+  200  history
+  201  sudo apt install nfs-server -y
+  202  sudo mkdir /nfsexport
+  203  sudo vim /etc/exports
+  204  sudo systemctl restart nfs-server
+  205  showmount -e localhost
+  206  sudo vim /etc/hosts
+  207  helm repo add nfs-subdir-external-provisioner  https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+  208  helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=192.168.29.101 --set nfs.path=/nfsexport
+  209  kubectl get pods
+  210  kubectl get pv
+  211  vim nfs-provisioner-pvc-test.yaml 
+  212  kubectl get storageclass
+  213  kubectl describe storageclass nfs-client 
+  214  kubectl apply -f nfs-provisioner-pvc-test.yaml 
+  215  kubectl get pvc,pv
+  216  kubectl describe pv pvc-f808333d-7ec1-44af-a24a-3ddf89eff2d7 
+  217  ls /nfsexport/
+  218  history
+  219  vim another-pvc-test.yaml 
+  220  kubectl apply -f another-pvc-test.yaml 
+  221  kubectl get pvc
+  222  kubectl patch storageclass nfs-client -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+  223  kubectl get pvc
+  224  kubectl edit sc nfs-client 
+  225  kubectl get svc
+  226  kubectl get pods
+  227  kubectl exec -it highprio-57ccd94998-ddjjl -- cat /etc/resolv.conf
+  228  kubectl get svc -A
+  229  kubectl get svc
+  230  kubectl exec -it highprio-57ccd94998-ddjjl -- ping testdploy
+  231  kubectl get cm -n kube-system coredns -o yaml
+  232  kubectl get all
+  233  kubectl delete deploy filledup highprio nginx-1761835222 testdploy 
+  234  kubectl run webserver --image=nginx
+  235  kubectl expose pod webserver --port=80
+  236  kubectl run testpod --image=busybox -- sleep 3600
+  237  kubectl run testpod2 --image=busybox -- sleep 3600
+  238  kubectl get svc
+  239  kubectl exec -it testpod -- wget webserver
+  240  kubectl exec -it testpod2 -- wget webserver
+  241  kubectl create ns remote
+  242  kubectl run interginx --image=nginx
+  243  kubectl run remotebox -n remote --image=busybox -- sleep 3600
+  244  kubectl expose pod interginx --port=80
+  245  kubectl exec -it remotebox -n remote -- cat /etc/resolv.conf
+  246  kubectl exec -it remotebox -n remote -- nslookup interginx
+  247  kubectl exec -it remotebox -n remote -- nslookup interginx.default.svc.cluster.local
+  248  history
+  249  vim nwpolicy-complete-example.yaml 
+  250  kubectl apply -f nwpolicy-complete-example.yaml 
+  251  kubectl expose pod nginx --port=80
+  252  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  253  vim nwpolicy-complete-example.yaml 
+  254  kubectl label pod busybox access=true
+  255  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  256  history
+  257  kubectl create ns nwp-namespace
+  258  vim nwp-lab10-1.yaml 
+  259  kubectl apply -f nwp-lab10-1.yaml 
+  260  kubectl expose pod nwp-nginx --port=80
+  261  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx
+  262  kubectl exec -it nwp-busybox -n nwp-namespace -- nslookup nwp-nginx
+  263  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  264  vim nwp-lab10-2.yaml 
+  265  kubectl apply -f nwp-lab10-2.yaml 
+  266  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  267  kubectl create deploy busybox --image=busybox -- sleep 3600
+  268  kubectl exec -it busybox-5c684d4858-pzdjl -- wget --spider --timeout=1 nwp-nginx
+  269  vim nwp-lab10-2.yaml 
+  270  vim examplenwp.yaml
+  271  vim vm.yaml
+  272  vim vm.yaml 
+  273  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  274  kubectl get deploy
+  275  kubectl get ns
+  276  kubectl get deploy -n kube-system 
+  277  kubectl get pods -n kube-system 
+  278  kubectl edit deployments.apps -n kube-system metrics-server 
+  279  kubectl get pods -n kube-system 
+  280  kubectl top pods
+  281  sudo apt update
+  282  sudo apt-cache madison kubeadm
+  283  pager /etc/apt/sources.list.d/kubernetes.list
+  284  vim /etc/apt/sources.list.d/kubernetes.list
+  285  sudo vim /etc/apt/sources.list.d/kubernetes.list
+  286  #sudo apt-mark unhold kubeadm && \
+  287  sudo apt-get update && sudo apt-get install -y kubeadm='1.34.x-*' && sudo apt-mark hold kubeadm
+  288  sudo apt-cache madison kubeadm
+  289  sudo apt-get update && sudo apt-get install -y kubeadm='1.34.1-1.1' && sudo apt-mark hold kubeadm
+  290  sudo apt-mark unhold kubeadm && sudo apt-get update && sudo apt-get install -y kubeadm='1.34.1-1.1' && sudo apt-mark hold kubeadm
+  291  kubeadm version
+  292  sudo kubeadm upgrade plan
+  293  sudo kubeadm upgrade apply v1.34.1
+  294  kubectl drain control --ignore-daemonsets
+  295  sudo apt-mark unhold kubelet kubectl && sudo apt-get update && sudo apt-get install -y kubelet='1.34.1-1.1' kubectl='1.34.1-1.1' && sudo apt-mark hold kubelet kubectl
+  296  sudo systemctl daemon-reload
+  297  sudo systemctl restart kubelet
+  298  kubectl uncordon control
+  299  kubectl get nodes
+  300  history
+  301  kubectl drain worker2
+  302  kubectl drain worker2 --ignore-daemonsets
+  303  kubectl drain worker2 --ignore-daemonsets --force
+  304  kubectl drain worker2 --ignore-daemonsets --force --delete-emptydir-data
+  305  kubectl uncordon worker2
+  306  kubectl get nodes
+  307  kubectl drain worker1 --ignore-daemonsets --force --delete-emptydir-data
+  308  kubectl uncordon worker1
+  309  kubectl get nodes
+  310  kubectl create deploy webstress --image=nginx
+  311  kubectl autoscale deploy webstress --min=2 --max=5 --cpu-percent=80
+  312  kubectl get hpa
+  313  kubectl get all --selector app=webstress
+  314  sudo vim /etc/kubernetes/manifests/kube-controller-manager.yaml 
+  315  ls /etc/kubernetes/manifests/
+  316  kubectl get pods -n kube-system 
+  317  sudo vim /etc/kubernetes/manifests/kube-controller-manager.yaml 
+  318  kubectl get pods -n kube-system 
+  319  sudo vim /etc/kubernetes/manifests/kube-controller-manager.yaml 
+  320  history > /tmp/oct25.txt
