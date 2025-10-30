@@ -11,7 +11,7 @@ OSVERSION=$(hostnamectl | awk '/Operating/ { print $4 }')
 [ $(arch) = aarch64 ] && PLATFORM=arm64
 [ $(arch) = x86_64 ] && PLATFORM=amd64
 
-sudo apt install -y jq
+sudo apt install -y jq curl wget vim git
 
 if [ $MYOS = "Ubuntu" ]
 then
