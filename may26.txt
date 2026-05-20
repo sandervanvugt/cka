@@ -1,0 +1,108 @@
+    1  sudo apt install git vim -y
+    2  git clone https://github.com/sandervanvugt/cka
+    3  history
+    4  cd cka
+    5  ls *sh
+    6  ./setup-container-previous-version.sh
+    7  ls *sh
+    8  ./setup-kubetools-previousversion.sh 
+    9  cat /etc/os-release 
+   10  history
+   11  systemctl status containerd
+   12  sudo kubeadm init
+   13  history
+   14  mkdir -p $HOME/.kube
+   15  kubectl get all
+   16  kubectl apply -f https://projectcalico.org/documentation/calico.yaml
+   17  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   18  kubectl get nodes
+   19  sysctl -a | grep ip_forw
+   20  sudo sysctl -a | grep ip_forw
+   21  sudo sysctl -a | grep bridge
+   22  sudo ls /etc/sysctl.d/
+   23  cat /etc/sysctl.d/99-kubernetes-cri.conf 
+   24  ip a
+   25  kubectl delete -f https://docs.projectcalico.org/manifests/calico.yaml
+   26  kubectl create deploy test --image=nginx
+   27  sleep 10; kubectl get all
+   28  kubectl describe pod test-56848fd9dc-bgbh2
+   29  kubectl get pods -A
+   30  sudo reboot
+   31  kubectl get pods -A
+   32  history
+   33  kubectl get pods -A
+   34  kubectl get nodes
+   35  sudo kubeadm reset
+   36  kubectl get all
+   37  sudo kubeadm init
+   38  mkdir -p $HOME/.kube
+   39  kubectl get all
+   40  kubectl get pods -n kube-system
+   41  kubectl create deploy test --image=nginx
+   42  kubectl get all
+   43  kubectl describe pod test-56848fd9dc-49x9m
+   44  history | grep calico
+   45  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   46  kubectl get pods -n kube-system
+   47  kubectl get nodes
+   48  kubectl get all
+   49  kubectl describe pod test-56848fd9dc-49x9m
+   50  kubectl completion -h | less
+   51  kubectl completion bash > ~/.kube/completion.bash.inc
+   52  history
+   53  sudo kubeadm config -h | less
+   54  sudo kubeadm config print -h | less
+   55  sudo kubeadm config print init-defaults | less
+   56  kubectl create ns limited
+   57  kubectl create quota -h | less
+   58  #kubectl create quota my-quota --hard=cpu=1,memory=1G,pods=2,services=3,replicationcontrollers=2,resourcequotas=1,secrets=5,persistentvolumeclaims=10
+   59  kubectl create quota limits --hard=pods=3,memory=500Mi,cpu=500m 
+   60  kubectl describe ns default 
+   61  kubectl delete quota limits
+   62  kubectl create quota limits --hard=pods=3,memory=500Mi,cpu=500m -n limits
+   63  kubectl create quota limits --hard=pods=3,memory=500Mi,cpu=500m -n limited
+   64  history
+   65  kubectl create deploy nnnginx --image=nginx --replicas=3 -n limited
+   66  kubectl get all -n limited
+   67  kubectl describe rs -n limited nnnginx-6d6d49f46c 
+   68  kubectl set resources -n limited deploy nnnginx --requests cpu=100m,memory=5Mi --limits cpu=200m,memory=20Mi
+   69  kubectl get pods -n limited 
+   70  sleep 20
+   71  kubectl get pods -n limited 
+   72  cd cka
+   73  vim limitrange.yaml 
+   74  kubectl apply -f limitrange.yaml -n limited 
+   75  kubectl describe -n limited
+   76  kubectl describe ns -n limited
+   77  kubectl run limitpod -n limited --image=nginx
+   78  kubectl run limitpod -n limited --image=nginx --dry-run=client -o yaml
+   79  vim limitrange.yaml 
+   80  kubectl apply -f limitrange.yaml 
+   81  vim limitrange.yaml 
+   82  kubectl apply -f limitrange.yaml 
+   83  kubectl run limitpod -n limited --image=nginx
+   84  cat limitrange.yaml 
+   85  vim limitrange.yaml 
+   86  kubectl apply -f limitrange.yaml -n limnited
+   87  kubectl apply -f limitrange.yaml -n limited
+   88  kubectl run limitpod -n limited --image=nginx
+   89  kubectl edit quota -n limited limits 
+   90  kubectl describe ns -n limited
+   91  kubectl run limitpod -n limited --image=nginx
+   92  kubectl get pods -n limited limitpod -o yaml | less
+   93  history
+   94  kubectl create priorityclass -h | less
+   95  kubectl create priorityclass high-priority --value=1000 --description="high priority" --preemption-policy="Never"
+   96  kubectl create priorityclass mid-priority --value=125 --description="mid priority" --global-default=true
+   97  kubectl run testpod --image=nginx
+   98  kubectl get pods testpod -o yaml | grep -B2 prio
+   99  kubectl create deploy highprio --image=nginx --dry-run=client -o yaml > prior.yaml
+  100  vim prior.yaml 
+  101  kubectl apply -f prior.yaml 
+  102  kubectl get pods highprio-6cbb65fb9d-l4qqd | grep -B2 prio
+  103  kubectl get pods highprio-6cbb65fb9d-l4qqd-o yaml  | grep -B2 prio
+  104  kubectl get pods highprio-6cbb65fb9d-l4qqd -o yaml  | grep -B2 prio
+  105  history
+  106  sudo systemctl status ssh
+  107  ip a
+  108  history > /tmp/may26.txt
