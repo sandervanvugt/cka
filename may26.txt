@@ -106,3 +106,207 @@
   106  sudo systemctl status ssh
   107  ip a
   108  history > /tmp/may26.txt
+  109  kubectl get nodes
+  110  ls *sh
+  111  sudo crictl 
+  112  sudo apt install cri-tools
+  113  kubectl get nodes
+  114  kubectl get pods -o wide
+  115  kubectl create deploy testing --image=nginx --replicas=6
+  116  kubectl get pods -o wide
+  117  kubectl describe pods testing-84f79d9995-xt687 
+  118  kubectl describe ns default
+  119  kubectl delete limitranges mem-limit-range 
+  120  kubectl describe pods testing-84f79d9995-xt687 
+  121  kubectl get pods
+  122  kubectl scale deployment --replicas=5
+  123  kubectl scale deployment testing --replicas=5
+  124  kubectl get pods
+  125  kubectl scale deployment testing --replicas=1
+  126  kubectl scale deployment testing --replicas=6
+  127  kubectl get pods
+  128  kubectl get pods -o wide
+  129  kubectl cordon worker1
+  130  kubectl get pods -o wide
+  131  kubectl create deploy two --image=nginx --replicas=6
+  132  kubectl get pods -o wide
+  133  kubectl uncordon worker1
+  134  kubectl get pods -o wide
+  135  kubectl scale deploy two --replicas 1
+  136  kubectl scale deploy two --replicas 6
+  137  kubectl get pods -o wide
+  138  kubectl completion -h | less
+  139  kubectl get pods -o wide
+  140  kubectl describe pod testpod | less
+  141  kubectl drain worker2
+  142  kubectl get ds -A
+  143  kubectl drain worker2 --ignore-daemonsets
+  144  kubectl drain worker2 --ignore-daemonsets --force
+  145  kubectl get nodes
+  146  kubectl get pods -o wide
+  147  kubectl uncordon worker2
+  148  kubectl get pods -o wide
+  149  kubectl cordon worker2
+  150  kubectl edit node worker2
+  151  kubectl uncordon worker2
+  152  kubectl edit node worker2
+  153  kubectl get nodes
+  154  kubectl get nodes
+  155  cd cka
+  156  ls
+  157  cat RESOURCES.txt 
+  158  kubectl get nodes
+  159  kubectl get pods -o wide
+  160  cd
+  161  sudo snap install helm --classic
+  162  arm
+  163  arch
+  164  ls
+  165  ls
+  166  tar xvf helm-v4.2.0-linux-arm64.tar.gz 
+  167  tar xxvf helm-v4.2.0-linux-arm64.tar.gz 
+  168  tar xzvf helm-v4.2.0-linux-arm64.tar.gz 
+  169  cd cka
+  170  ls *pvc*
+  171  cd ..
+  172  git clone https://github.com/sandervanvugt/ckad
+  173  cd ckad
+  174  ls *pvc*
+  175  vim pv-pvc-pod.yaml 
+  176  kubectl apply -f pv-pvc-pod.yaml 
+  177  kubectl delete -f pv-pvc-pod.yaml 
+  178  vim pv-pvc-pod.yaml 
+  179  kubectl apply -f pv-pvc-pod.yaml 
+  180  kubectl get pvc,pv
+  181  sudo snap install helm -y
+  182  sudo snap install helm --classic
+  183  curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash
+  184  helm 
+  185  sudo apt install -y nfs-server
+  186  sudo mkdir /nfsexports
+  187  sudo mkdir /nfsexport
+  188  sudo vim /etc/exports
+  189  sudo systemctl enable --now nfs-server
+  190  sudo systemctl restart nfs-server
+  191  ./countdown 3
+  192  sudo systemctl stop nfs-server
+  193  sudo systemctl start nfs-server
+  194  history
+  195  helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+  196  helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=192.168.29.144 --set nfs.path=/nfsexport
+  197  kubectl get pods
+  198  kubectl get pods
+  199  kubectl get sc
+  200  cd ../cka
+  201  vim nfs-provisioner-pvc-test.yaml 
+  202  kubectl get pvc,pv
+  203  kubectl apply -f nfs-provisioner-pvc-test.yaml 
+  204  kubectl get pvc,pv
+  205  grep nfs-pvc-test *
+  206  ls *pvc*
+  207  cp pv-pvc-pod.yaml nfs-pvc-pod.yaml
+  208  vim nfs-pvc-pod.yaml 
+  209  kubectl get pvc
+  210  vim nfs-pvc-pod.yaml 
+  211  kubectl apply -f nfs-pvc-pod.yaml 
+  212  vim nfs-pvc-pod.yaml 
+  213  kubectl exec -it nfs-pv-pod -- touch /usr/share/nginx/html/hellohallo
+  214  cd /nfsexport
+  215  ls
+  216  cd default-nfs-pvc-test-pvc-2f59b388-0f5e-4b83-bab0-585fedb59bac/
+  217  ls
+  218  cd
+  219  history
+  220  cd cka
+  221  cat nfs-pvc-pod.yaml 
+  222  vim another-pvc-test.yaml 
+  223  kubectl apply -f another-pvc-test.yaml 
+  224  kubectl get pvc
+  225  kubectl describe pvc another-nfs-pvc-test 
+  226  kubectl get sc
+  227  kubectl patch sc nfs-client -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+  228  kubectl get pvc
+  229  history
+  230  kubectl edit sc
+  231  kubectl get pods
+  232  kubectl logs nfs-subdir-external-provisioner-5f574cfd6b-7hkgt
+  233  ./counter.sh 12
+  234  kubectl get pods -n kube-system 
+  235  kubectl get svc -n kube-system 
+  236  kubectl get cm -n kube-system coredns -o yaml
+  237  kubectl run webserver --image=nginx
+  238  kubectl expose pod webserver --port=80
+  239  kubectl run testpod --image=busybox -- sleep 3600
+  240  kubectl get svc
+  241  kubectl exec -it testpod -- curl webserver
+  242  kubectl exec -it testpod -- wget webserver
+  243  kubectl create ns remote
+  244  kubectl run interginx --image=nginx
+  245  kubectl run remotepod -n remote --image=busybox -- sleep 3600
+  246  kubectl expose pod interginx --port 80
+  247  kubectl exec -it remotebox -n remote -- cat /etc/resolv.conf
+  248  kubectl exec -it remotepod -n remote -- cat /etc/resolv.conf
+  249  kubectl exec -it remotepod -n remote -- nslookup interginx
+  250  kubectl exec -it remotepod -n remote -- nslookup interginx.default.svc.cluster.local
+  251  vim nwpolicy-complete-example.yaml 
+  252  kubectl apply -f nwpolicy-complete-example.yaml 
+  253  kubectl expose pod nginx --port=80
+  254  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  255  kubectl label pod busybox access="true"
+  256  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  257  ls
+  258  vim nwp-lab10-1.yaml 
+  259  kubectl get ns
+  260  kubectl create ns nwp-namespace
+  261  kubectl apply -f nwp-lab10-1.yaml 
+  262  vim nwp-lab10-1.yaml 
+  263  kubectl apply -f nwp-lab10-1.yaml 
+  264  kubectl expose pod nwp-nginx --port=80
+  265  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx
+  266  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  267  vim nwp-lab10-2.yaml 
+  268  kubectl apply -f nwp-lab10-2.yaml 
+  269  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  270  kubectl create deploy busybox --image=busybox -- sleep 3600
+  271  kubectl exec -it busybox-795bcd94f6-n7pfn -- wget --spider --timeout=1 nwp-nginx
+  272  history
+  273  kubectl create ns resticted
+  274  kubectl run rnginx -n resticted --image=nginx
+  275  kubectl expose -n resticted pod rnginx --port=80
+  276  kubectl get pods -n resticted rnginx -o yaml | less
+  277  cd ..
+  278  ls
+  279  vim nwp.yaml 
+  280  kubectl describe ns default | less
+  281  vim nwp.yaml 
+  282  kubectl apply -f nwp.yaml 
+  283  kubectl get pods
+  284  kubectl exec -it busybox -- wget --spider --timeout=1 rnginx.restricted.svc.cluster.local
+  285  kubectl exec -it busybox -- wget --spider --timeout=1 rnginx.resticted.svc.cluster.local
+  286  kubectl get pods busybox --show-labels
+  287  kubectl label pod busybox access-
+  288  kubectl exec -it busybox -- wget --spider --timeout=1 rnginx.resticted.svc.cluster.local
+  289  kubectl get netpol -n resticted 
+  290  kubectl get netpol -n resticted -o yaml | less
+  291  kubectl get pods -n resticted -L
+  292  kubectl get pods -n resticted --show-labels
+  293  kubectl edit -n resticted netpol test-network-policy 
+  294  kubectl exec -it busybox -- wget --spider --timeout=1 rnginx.resticted.svc.cluster.local
+  295  kubectl label pod busybox access="yes"
+  296  kubectl exec -it busybox -- wget --spider --timeout=1 rnginx.resticted.svc.cluster.local
+  297  history
+  298  kubectl get cm -n kube-system 
+  299  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  300  kubectl edit -n kube-system deploy metrics-server 
+  301  kubectl get pods -n kube-system 
+  302  kubectl get pods -n kube-system 
+  303  kubectl -n kube-system logs metrics-server-6cb56849d5-brkw8 
+  304  kubectl get pods -n kube-system 
+  305  kubectl top pods
+  306  kubectl top pods -A
+  307  kubectl top pods -A | sort -k4
+  308  kubectl top pods -A | sort -k3
+  309  kubectl top pods -A | sort -n -k3
+  310  kubectl top pods -A | sort -n -k4
+  311  history
+  312  history > /tmp/may26.txt 
