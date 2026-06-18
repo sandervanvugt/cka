@@ -58,6 +58,10 @@ version = 2
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
             SystemdCgroup = true
 	TOML
+	if grep '26.04' /etc/os-release
+	then
+		sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+	fi	
 
 	# Restart containerd
 	sudo systemctl restart containerd	
