@@ -1,0 +1,138 @@
+    1  sudo apt install -y vim git
+    2  git clone https://github.com/sandervanvugt/cka
+    3  cd cka/
+    4  ls
+    5  ls *sh
+    6  vim setup-container.sh 
+    7  vim setup-container-previous-version.sh 
+    8  ./setup-container-previous-version.sh
+    9  ./setup-kubetools-previousversion.sh 
+   10  sudo kubeadm init
+   11  kubectl get all
+   12  history
+   13  kubectl get all
+   14  ps aux | grep dpkg
+   15  sudo kill -9 4438
+   16  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   17  kubectl get pods -n kube-system
+   18  history
+   19  kubectl get nodes
+   20  history
+   21  sudo kubeadm --help
+   22  sudo kubeadm token --help
+   23  sudo kubeadm token generate
+   24  sudo kubeadm token generate --help
+   25  history
+   26  vim setup-container.sh 
+   27  sudo systemctl status kubelet
+   28  cd /etc/kubernetes/
+   29  ls
+   30  cat admin.conf 
+   31  sudo cat admin.conf 
+   32  ls -l admin.conf 
+   33  sudo admin.conf /tmp
+   34  ls -ld .
+   35  cp admin.conf /tmp/
+   36  sudo cp admin.conf /tmp/
+   37  sudo chmod 644 /tmp/admin.conf
+   38  ls -l /tmp/admin.conf 
+   39  cd
+   40  vim ~/.kube/config 
+   41  kubectl config view
+   42  vim ~/.kube/config 
+   43  kubectl config view
+   44  kubectl set-context anywhere
+   45  kubectl --help
+   46  kubectl set context anywhere
+   47  kubectl set context=anywhere
+   48  kubectl set --help | le
+   49  kubectl set --help | less
+   50  kubectl api-resources | grep calico
+   51  kubectl get crds
+   52  kubectl get -n kube-system pods
+   53  kubectl get -n kube-system daemonset
+   54  kubeadm token --help
+   55  kubeadm token create --print-join-command
+   56  kubectl create quota qtest --hard pods=3,cpu=100m,memory=500Mi --namespace limited
+   57  kubectl create ns limited
+   58  kubectl create quota qtest --hard pods=3,cpu=100m,memory=500Mi --namespace limited
+   59  kubectl create deploy nginx --image=nginx --replicas=3 -n limited
+   60  kubectl get all -n limited
+   61  kubectl -n limited describe rs
+   62  kubectl set resources deploy nginx -n limited --requests cpu=100m,memory=5MI --limits cpu=200m,memory=20Mi 
+   63  kubectl set resources deploy nginx -n limited --requests cpu=100m,memory=5Mi --limits cpu=200m,memory=20Mi 
+   64  kubectl get pods -n limited
+   65  kubectl get all -n limited
+   66  kubectl describe ns limited
+   67  kubectl edit -n limited quota 
+   68  kubectl get all -n limited
+   69  kubectl scale -n limited deploy nginx --replicas=1
+   70  kubectl scale -n limited deploy nginx --replicas=3
+   71  kubectl get all -n limited
+   72  history
+   73  cd cka
+   74  vim limitrange.yaml 
+   75  kubectl apply -f limitrange.yaml 
+   76  kubectl describe ns default
+   77  kubectl delete -f limitrange.yaml 
+   78  kubectl apply -f limitrange.yaml -n limited
+   79  kubectl run limitpod --image=nginx -n limited
+   80  kubectl delete -n limited quota
+   81  kubectl get -n limited quota
+   82  kubectl delete -n limited quota qtest
+   83  kubectl run limitpod --image=nginx -n limited
+   84  kubectl describe pod -n limited limitpod
+   85  history
+   86  kubectl create priorityclass high-priority --value=100 --description="high priority"
+   87  kubectl completion --help | less
+   88  kubectl completion bash > ~/.kube/completion.bash.inc
+   89  kubectl delete priorityclasses.scheduling.k8s.io high-priority 
+   90  kubectl create priorityclass high-priority --value=100 --description="high priority" --preemption-policy="Never"
+   91  kubectl create priorityclass mid-priority --value=50 --description="mid priority" --global-default=true
+   92  kubectl run testpod --image=nginx
+   93  kubectl get pod testpod -o yaml | grep -B2 -i priorityclass
+   94  kubectl create deploy highprio --image=nginx 
+   95  kubectl edit deployments.apps highprio 
+   96  kubectl create ns restricted
+   97  kubectl create quota -h | less
+   98  #kubectl create quota my-quota --hard=cpu=1,memory=1G,pods=2,services=3,replicationcontrollers=2,resourcequotas=1,secrets=5,persistentvolumeclaims=10
+   99  kubectl create quota restricted -n restricted --hard=memory=1G,pods=3
+  100  kubectl create -n restricted deploy task7deploy --replicas=3 --image=nginx
+  101  kubectl get all -n restricted 
+  102  kubectl set resources -h | less
+  103  kubectl set resources -n restricted deployment taks7deploy --limits=memory=64Mi --requests=memory=32Mi
+  104  kubectl set resources -n restricted deployment task7deploy --limits=memory=64Mi --requests=memory=32Mi
+  105  kubectl get all -n restricted 
+  106  kubectl run -h | less
+  107  kubectl run -n restricted verybusy --image=busybox -- sleep 3600
+  108  kubectl run -n restricted verybusy --image=busybox --dry-run=client -o yaml -- sleep 3600
+  109  kubectl run -n restricted verybusy --image=busybox --dry-run=client -o yaml -- sleep 3600 > lab7.yaml
+  110  kubectl -n restricted get pods task7deploy-549db4dcf5-qxxbv 
+  111  kubectl -n restricted get pods task7deploy-549db4dcf5-qxxbv -o yaml
+  112  history
+  113  vim lab7.yaml 
+  114  kubeactl apply -f lab7.yaml 
+  115  kubectl apply -f lab7.yaml 
+  116  history
+  117  sudo apt install crictl
+  118  sudo apt install cri-tools
+  119  sudo crictl --help
+  120  sudo vim /etc/crictl.yaml
+  121  sudo crictl ps
+  122  kubectl get pods -o wide
+  123  kubectl get pods -A -o wide
+  124  sudo crictl ps
+  125  sudo crictl inspect 6c3940b6a5583
+  126  sudo crictl pull mariadb
+  127  sudo crictl images
+  128  kubectl get nodes
+  129  kubectl drain int602
+  130  kubectl drain int602 --ignore-daemonsets
+  131  kubectl drain int602 --ignore-daemonsets --force
+  132  kubectl get nodes
+  133  kubectl get pods -A -o wide
+  134  kubectl uncordon int602
+  135  kubectl get pods -A -o wide
+  136  history
+  137  sudo apt install openssh-server
+  138  history > /tmp/july2026
