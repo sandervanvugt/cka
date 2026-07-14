@@ -136,3 +136,187 @@
   136  history
   137  sudo apt install openssh-server
   138  history > /tmp/july2026
+  139  kubectl get nodes
+  140  kubectl drain int602
+  141  kubectl drain int602 --ignore-daemonsets 
+  142  kubectl describe node int602
+  143  kubectl describe node int602 | less
+  144  kubectl get nodes
+  145  kubectl uncordon int602
+  146  systemctl status containerd
+  147  systemctl status kubelet
+  148  kubectl get nodes
+  149  sudo snap install helm --classic
+  150  helm version
+  151  helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+  152  ping nu.nl
+  153  helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+  154  helm repo add bitnami https://charts.bitnami.com/bitnami
+  155  helm repo list
+  156  helm search repo bitnami
+  157  helm search repo file
+  158  helm search repo nginx --version
+  159  helm search repo nginx --versions
+  160  helm repo update
+  161  helm install bitnami/mysql --generate-name
+  162  kubectl get all
+  163  helm show chart bitnami/mysql
+  164  helm show all bitnami/mysql
+  165  helm list
+  166  helm status mysql-1784038855
+  167  helm show values
+  168  helm repo list
+  169  helm show values bitnami/nginx
+  170  helm show values bitnami/nginx | grep commonLab
+  171  helm show values bitnami/nginx | grep replicaC
+  172  vim values.yaml
+  173  helm install bitnami/nginx --generate-name --values values.yaml
+  174  helm list
+  175  helm get values nginx-1784039262
+  176  kubectl get all
+  177  helm repo add argo https://argoproj.github.io/argo-helm
+  178  helm repo update
+  179  helm search repo argo/argo-cd
+  180  helm template my-argo-cd argo/argo-cd --version 10.1.3 > argo-cd-template.yaml
+  181  vim argo-cd-template.yaml 
+  182  helm show values argo/argo-cd
+  183  helm show values argo/argo-cd | wc -l
+  184  helm show values --all argo/argo-cd | wc -l
+  185  helm get values --all argo/argo-cd | wc -l
+  186* 
+  187  helm show values --all argo/argo-cd > values.yaml
+  188  helm show values argo/argo-cd > values.yaml
+  189  vim values.yaml 
+  190  helm template my-argocd argo/argo-cd -f values.yaml > argo-cd-template.yaml
+  191  kubectl apply -f argo-cd-template.yaml 
+  192  kubectl get all
+  193  history
+  194  helm list
+  195  helm get values nginx-1784039262
+  196  helm get values --all nginx-1784039262
+  197  kubectl get deploy
+  198  kubectl get deployments.apps nginx-1784039262 -o yaml | less
+  199  history | grep apply
+  200  kubectl delete -f argo-cd-template.yaml 
+  201  sudo apt install nfs-server -y
+  202  sudo mkdir /nfsexport
+  203  sudo vim /etc/exports
+  204  sudo systemctl restart nfs-server
+  205  showmount -e 192.168.29.150
+  206  helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+  207  helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=192.168.29.150 --set nfs.path=/nfsexport
+  208  kubectl get pods
+  209  history
+  210  kubectl get sc
+  211  kubectl get pv
+  212  vim nfs-provisioner-pvc-test.yaml 
+  213  kubectl apply -f nfs-provisioner-pvc-test.yaml 
+  214  kubectl get pvc,pv
+  215  kubectl describe pvc data-mysql-1784038855-0 
+  216  kubectl describe pvc nfs-pvc-test 
+  217  kubectl get sc
+  218  kubectl patch sc nfs-client -p '{"metadata":{"annotation":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+  219  kubectl patch sc nfs-client -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+  220  kubectl get sc -o yaml | less
+  221  kubectl get pvc
+  222  kubectl get deploy
+  223  kubectl create deploy nginxserver --image=nginx --replicas=3
+  224  kubectl get pods -o wide
+  225  curl 172.16.16.86
+  226  kubectl get deploy
+  227  kubectl expose deploy nginxserver 
+  228  kubectl expose deploy nginxserver --port=80
+  229  kubectl get svc
+  230  curl 10.97.28.71
+  231  kubectl get svc
+  232  kubectl edit svc nginxserver 
+  233  kubectl get svc
+  234  history
+  235  kubectl edit svc nginxserver 
+  236  kubectl edit node int405 
+  237  kubectl get svc
+  238  kubectl get cm -n kube-system coredns -o yaml
+  239  kubectl run webserver --image=nginx
+  240  kubectl expose pod webserver --port=80
+  241  kubectl run testpod --image=busybox -- sleep 3600
+  242  kubectl run testpod2 --image=busybox -- sleep 3600
+  243  kubectl get svc
+  244  kubectl exec -it testpod -- wget webserver
+  245  kubectl exec -it testpod2 -- wget webserver
+  246  kubectl create ns remote
+  247  kubectl run interginx --image=nginx
+  248  kubectl run remotebox --image=busybox -n remote -- sleep 3600
+  249  kubectl expose pod interginx --port=80
+  250  kubectl exec -it remotebox -n remote -- cat /etc/resolv.conf
+  251  kubectl exec -it remotebox -n remote -- nslookup interginx
+  252  kubectl exec -it remotebox -n remote -- nslookup interginx.interginx.default.svc.cluster.local
+  253  kubectl exec -it remotebox -n remote -- nslookup interginx.default.svc.cluster.local
+  254  history
+  255  vim nwpolicy-complete-example.yaml 
+  256  kubectl apply -f nwpolicy-complete-example.yaml 
+  257  kubectl expose pod nginx --port=80
+  258  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  259  kubectl label pod busybox access=true
+  260  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  261  history
+  262  kubectl create ns nwp-namespace
+  263  kubectl get ns
+  264  vim nwp-lab10-1.yaml 
+  265  kubectl apply -f nwp-lab10-1.yaml 
+  266  kubectl expose pod nwp-nginx --port=80
+  267  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx
+  268  kubectl exec -it nwp-busybox -n nwp-namespace -- nslookup nwp-nginx
+  269  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  270  vim nwp-lab10-2.yaml 
+  271  kubectl apply -f nwp-lab10-2.yaml 
+  272  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  273  kubectl create deploy busybox --image=busybox -- sleep 3600
+  274  kubectl exec -it busybox-795bcd94f6-9t2xr -- wget --spider --timeout=1 nwp-nginx
+  275  kubectl describe ns default
+  276  kubectl get netpol
+  277  kubectl delete netpol deny-from-other-namespaces 
+  278  history
+  279  vim exercise.yaml
+  280  kubectl create ns resticted
+  281  kubectl create deploy -n resticted mydeploy --image=nginx
+  282  kubectl get pods -o yaml -n resticted 
+  283  vim exercise.yaml
+  284  kubectl get ns default -o yaml | less
+  285  vim exercise.yaml
+  286  kubectl apply -f exercise.yaml 
+  287  vim exercise.yaml
+  288  kubectl get pods --show-labels
+  289  kubectl get pods --show-labels | grep access
+  290  kubectl label pod busybox access="yes"
+  291  kubectl label pod busybox access="yes" --overwrite
+  292  history | grep spider
+  293  #kubectl exec -it busybox -- wget --spider --timeout=1 
+  294  kubectl get pods -n resticted 
+  295  kubectl exec -it busybox -- wget --spider --timeout=1 mydeploy-fd6bb5c94-fdq8m.resticted.svc.cluster.local
+  296  history
+  297  kubectl expose -n resticted deploy mydeploy
+  298  kubectl expose -n resticted deploy mydeploy --port=80
+  299  kubectl exec -it busybox -- wget --spider --timeout=1 mydeploy.resticted.svc.cluster.local
+  300  history
+  301  kubectl top
+  302  kubectl top pod
+  303  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  304  kubectl get pods -n kube-system 
+  305  kubectl logs -n kube-system metrics-server-794dd65494-mbcwv 
+  306  kubectl edit -n kube-system deployments.apps metrics-server 
+  307  kubectl get pods -n kube-system 
+  308  kubectl top pods
+  309  kubectl top pods | sort -k3
+  310  kubectl top nodes
+  311  kubectl get nodes
+  312  history
+  313  kubectl get nodes
+  314  history
+  315  kubectl get deploy
+  316  kubectl autoscale -h | less
+  317  #kubectl autoscale deployment nginxserver --min=5 --max=10
+  318  kubectl autoscale deployment nginxserver --min=5 --max=10
+  319  kubectl get hpa
+  320  kubectl get deploy
+  321  history
+  322  history > /tmp/july2026
