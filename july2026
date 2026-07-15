@@ -183,140 +183,312 @@
   183  helm show values argo/argo-cd | wc -l
   184  helm show values --all argo/argo-cd | wc -l
   185  helm get values --all argo/argo-cd | wc -l
-  186* 
-  187  helm show values --all argo/argo-cd > values.yaml
-  188  helm show values argo/argo-cd > values.yaml
-  189  vim values.yaml 
-  190  helm template my-argocd argo/argo-cd -f values.yaml > argo-cd-template.yaml
-  191  kubectl apply -f argo-cd-template.yaml 
-  192  kubectl get all
-  193  history
-  194  helm list
-  195  helm get values nginx-1784039262
-  196  helm get values --all nginx-1784039262
-  197  kubectl get deploy
-  198  kubectl get deployments.apps nginx-1784039262 -o yaml | less
-  199  history | grep apply
-  200  kubectl delete -f argo-cd-template.yaml 
-  201  sudo apt install nfs-server -y
-  202  sudo mkdir /nfsexport
-  203  sudo vim /etc/exports
-  204  sudo systemctl restart nfs-server
-  205  showmount -e 192.168.29.150
-  206  helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
-  207  helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=192.168.29.150 --set nfs.path=/nfsexport
-  208  kubectl get pods
-  209  history
-  210  kubectl get sc
-  211  kubectl get pv
-  212  vim nfs-provisioner-pvc-test.yaml 
-  213  kubectl apply -f nfs-provisioner-pvc-test.yaml 
-  214  kubectl get pvc,pv
-  215  kubectl describe pvc data-mysql-1784038855-0 
-  216  kubectl describe pvc nfs-pvc-test 
-  217  kubectl get sc
-  218  kubectl patch sc nfs-client -p '{"metadata":{"annotation":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
-  219  kubectl patch sc nfs-client -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
-  220  kubectl get sc -o yaml | less
-  221  kubectl get pvc
-  222  kubectl get deploy
-  223  kubectl create deploy nginxserver --image=nginx --replicas=3
-  224  kubectl get pods -o wide
-  225  curl 172.16.16.86
-  226  kubectl get deploy
-  227  kubectl expose deploy nginxserver 
-  228  kubectl expose deploy nginxserver --port=80
-  229  kubectl get svc
-  230  curl 10.97.28.71
-  231  kubectl get svc
-  232  kubectl edit svc nginxserver 
-  233  kubectl get svc
-  234  history
-  235  kubectl edit svc nginxserver 
-  236  kubectl edit node int405 
-  237  kubectl get svc
-  238  kubectl get cm -n kube-system coredns -o yaml
-  239  kubectl run webserver --image=nginx
-  240  kubectl expose pod webserver --port=80
-  241  kubectl run testpod --image=busybox -- sleep 3600
-  242  kubectl run testpod2 --image=busybox -- sleep 3600
-  243  kubectl get svc
-  244  kubectl exec -it testpod -- wget webserver
-  245  kubectl exec -it testpod2 -- wget webserver
-  246  kubectl create ns remote
-  247  kubectl run interginx --image=nginx
-  248  kubectl run remotebox --image=busybox -n remote -- sleep 3600
-  249  kubectl expose pod interginx --port=80
-  250  kubectl exec -it remotebox -n remote -- cat /etc/resolv.conf
-  251  kubectl exec -it remotebox -n remote -- nslookup interginx
-  252  kubectl exec -it remotebox -n remote -- nslookup interginx.interginx.default.svc.cluster.local
-  253  kubectl exec -it remotebox -n remote -- nslookup interginx.default.svc.cluster.local
-  254  history
-  255  vim nwpolicy-complete-example.yaml 
-  256  kubectl apply -f nwpolicy-complete-example.yaml 
-  257  kubectl expose pod nginx --port=80
-  258  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
-  259  kubectl label pod busybox access=true
-  260  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
-  261  history
-  262  kubectl create ns nwp-namespace
-  263  kubectl get ns
-  264  vim nwp-lab10-1.yaml 
-  265  kubectl apply -f nwp-lab10-1.yaml 
-  266  kubectl expose pod nwp-nginx --port=80
-  267  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx
-  268  kubectl exec -it nwp-busybox -n nwp-namespace -- nslookup nwp-nginx
-  269  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
-  270  vim nwp-lab10-2.yaml 
-  271  kubectl apply -f nwp-lab10-2.yaml 
-  272  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
-  273  kubectl create deploy busybox --image=busybox -- sleep 3600
-  274  kubectl exec -it busybox-795bcd94f6-9t2xr -- wget --spider --timeout=1 nwp-nginx
-  275  kubectl describe ns default
-  276  kubectl get netpol
-  277  kubectl delete netpol deny-from-other-namespaces 
-  278  history
-  279  vim exercise.yaml
-  280  kubectl create ns resticted
-  281  kubectl create deploy -n resticted mydeploy --image=nginx
-  282  kubectl get pods -o yaml -n resticted 
-  283  vim exercise.yaml
-  284  kubectl get ns default -o yaml | less
-  285  vim exercise.yaml
-  286  kubectl apply -f exercise.yaml 
-  287  vim exercise.yaml
-  288  kubectl get pods --show-labels
-  289  kubectl get pods --show-labels | grep access
-  290  kubectl label pod busybox access="yes"
-  291  kubectl label pod busybox access="yes" --overwrite
-  292  history | grep spider
-  293  #kubectl exec -it busybox -- wget --spider --timeout=1 
-  294  kubectl get pods -n resticted 
-  295  kubectl exec -it busybox -- wget --spider --timeout=1 mydeploy-fd6bb5c94-fdq8m.resticted.svc.cluster.local
-  296  history
-  297  kubectl expose -n resticted deploy mydeploy
-  298  kubectl expose -n resticted deploy mydeploy --port=80
-  299  kubectl exec -it busybox -- wget --spider --timeout=1 mydeploy.resticted.svc.cluster.local
-  300  history
-  301  kubectl top
-  302  kubectl top pod
-  303  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-  304  kubectl get pods -n kube-system 
-  305  kubectl logs -n kube-system metrics-server-794dd65494-mbcwv 
-  306  kubectl edit -n kube-system deployments.apps metrics-server 
-  307  kubectl get pods -n kube-system 
-  308  kubectl top pods
-  309  kubectl top pods | sort -k3
-  310  kubectl top nodes
-  311  kubectl get nodes
-  312  history
-  313  kubectl get nodes
-  314  history
-  315  kubectl get deploy
-  316  kubectl autoscale -h | less
-  317  #kubectl autoscale deployment nginxserver --min=5 --max=10
-  318  kubectl autoscale deployment nginxserver --min=5 --max=10
-  319  kubectl get hpa
-  320  kubectl get deploy
-  321  history
-  322  history > /tmp/july2026
+  186  helm show values --all argo/argo-cd > values.yaml
+  187  helm show values argo/argo-cd > values.yaml
+  188  vim values.yaml 
+  189  helm template my-argocd argo/argo-cd -f values.yaml > argo-cd-template.yaml
+  190  kubectl apply -f argo-cd-template.yaml 
+  191  kubectl get all
+  192  history
+  193  helm list
+  194  helm get values nginx-1784039262
+  195  helm get values --all nginx-1784039262
+  196  kubectl get deploy
+  197  kubectl get deployments.apps nginx-1784039262 -o yaml | less
+  198  history | grep apply
+  199  kubectl delete -f argo-cd-template.yaml 
+  200  sudo apt install nfs-server -y
+  201  sudo mkdir /nfsexport
+  202  sudo vim /etc/exports
+  203  sudo systemctl restart nfs-server
+  204  showmount -e 192.168.29.150
+  205  helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+  206  helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=192.168.29.150 --set nfs.path=/nfsexport
+  207  kubectl get pods
+  208  history
+  209  kubectl get sc
+  210  kubectl get pv
+  211  vim nfs-provisioner-pvc-test.yaml 
+  212  kubectl apply -f nfs-provisioner-pvc-test.yaml 
+  213  kubectl get pvc,pv
+  214  kubectl describe pvc data-mysql-1784038855-0 
+  215  kubectl describe pvc nfs-pvc-test 
+  216  kubectl get sc
+  217  kubectl patch sc nfs-client -p '{"metadata":{"annotation":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+  218  kubectl patch sc nfs-client -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+  219  kubectl get sc -o yaml | less
+  220  kubectl get pvc
+  221  kubectl get deploy
+  222  kubectl create deploy nginxserver --image=nginx --replicas=3
+  223  kubectl get pods -o wide
+  224  curl 172.16.16.86
+  225  kubectl get deploy
+  226  kubectl expose deploy nginxserver 
+  227  kubectl expose deploy nginxserver --port=80
+  228  kubectl get svc
+  229  curl 10.97.28.71
+  230  kubectl get svc
+  231  kubectl edit svc nginxserver 
+  232  kubectl get svc
+  233  history
+  234  kubectl edit svc nginxserver 
+  235  kubectl edit node int405 
+  236  kubectl get svc
+  237  kubectl get cm -n kube-system coredns -o yaml
+  238  kubectl run webserver --image=nginx
+  239  kubectl expose pod webserver --port=80
+  240  kubectl run testpod --image=busybox -- sleep 3600
+  241  kubectl run testpod2 --image=busybox -- sleep 3600
+  242  kubectl get svc
+  243  kubectl exec -it testpod -- wget webserver
+  244  kubectl exec -it testpod2 -- wget webserver
+  245  kubectl create ns remote
+  246  kubectl run interginx --image=nginx
+  247  kubectl run remotebox --image=busybox -n remote -- sleep 3600
+  248  kubectl expose pod interginx --port=80
+  249  kubectl exec -it remotebox -n remote -- cat /etc/resolv.conf
+  250  kubectl exec -it remotebox -n remote -- nslookup interginx
+  251  kubectl exec -it remotebox -n remote -- nslookup interginx.interginx.default.svc.cluster.local
+  252  kubectl exec -it remotebox -n remote -- nslookup interginx.default.svc.cluster.local
+  253  history
+  254  vim nwpolicy-complete-example.yaml 
+  255  kubectl apply -f nwpolicy-complete-example.yaml 
+  256  kubectl expose pod nginx --port=80
+  257  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  258  kubectl label pod busybox access=true
+  259  kubectl exec -it busybox -- wget --spider --timeout=1 nginx
+  260  history
+  261  kubectl create ns nwp-namespace
+  262  kubectl get ns
+  263  vim nwp-lab10-1.yaml 
+  264  kubectl apply -f nwp-lab10-1.yaml 
+  265  kubectl expose pod nwp-nginx --port=80
+  266  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx
+  267  kubectl exec -it nwp-busybox -n nwp-namespace -- nslookup nwp-nginx
+  268  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  269  vim nwp-lab10-2.yaml 
+  270  kubectl apply -f nwp-lab10-2.yaml 
+  271  kubectl exec -it nwp-busybox -n nwp-namespace -- wget --spider --timeout=1 nwp-nginx.default.svc.cluster.local
+  272  kubectl create deploy busybox --image=busybox -- sleep 3600
+  273  kubectl exec -it busybox-795bcd94f6-9t2xr -- wget --spider --timeout=1 nwp-nginx
+  274  kubectl describe ns default
+  275  kubectl get netpol
+  276  kubectl delete netpol deny-from-other-namespaces 
+  277  history
+  278  vim exercise.yaml
+  279  kubectl create ns resticted
+  280  kubectl create deploy -n resticted mydeploy --image=nginx
+  281  kubectl get pods -o yaml -n resticted 
+  282  vim exercise.yaml
+  283  kubectl get ns default -o yaml | less
+  284  vim exercise.yaml
+  285  kubectl apply -f exercise.yaml 
+  286  vim exercise.yaml
+  287  kubectl get pods --show-labels
+  288  kubectl get pods --show-labels | grep access
+  289  kubectl label pod busybox access="yes"
+  290  kubectl label pod busybox access="yes" --overwrite
+  291  history | grep spider
+  292  #kubectl exec -it busybox -- wget --spider --timeout=1 
+  293  kubectl get pods -n resticted 
+  294  kubectl exec -it busybox -- wget --spider --timeout=1 mydeploy-fd6bb5c94-fdq8m.resticted.svc.cluster.local
+  295  history
+  296  kubectl expose -n resticted deploy mydeploy
+  297  kubectl expose -n resticted deploy mydeploy --port=80
+  298  kubectl exec -it busybox -- wget --spider --timeout=1 mydeploy.resticted.svc.cluster.local
+  299  history
+  300  kubectl top
+  301  kubectl top pod
+  302  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  303  kubectl get pods -n kube-system 
+  304  kubectl logs -n kube-system metrics-server-794dd65494-mbcwv 
+  305  kubectl edit -n kube-system deployments.apps metrics-server 
+  306  kubectl get pods -n kube-system 
+  307  kubectl top pods
+  308  kubectl top pods | sort -k3
+  309  kubectl top nodes
+  310  kubectl get nodes
+  311  history
+  312  kubectl get nodes
+  313  history
+  314  kubectl get deploy
+  315  kubectl autoscale -h | less
+  316  #kubectl autoscale deployment nginxserver --min=5 --max=10
+  317  kubectl autoscale deployment nginxserver --min=5 --max=10
+  318  kubectl get hpa
+  319  kubectl get deploy
+  320  history
+  321  history > /tmp/july2026
+  322  sudo ls -l /etc/kubernetes/manifests/
+  323  ps aux | grep kubelet
+  324  kubectl run staticpod --image=nginx --dry-run=client -o yaml > staticpod.yaml
+  325  cat staticpod.yaml 
+  326  kubectl get pods -o wide
+  327  sudo apt install etcd-client
+  328  ps aux | grep etcd
+  329  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key get / --prefix --keys-only
+  330  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key get snapshot save /tmp/etcbackup.db
+  331  sudo etcdctl --write-out=table snapshot status /tmp/etcbackup.db
+  332  ls -l /tmp/et*
+  333  ps aux | grep etcd 
+  334  sudo etcdctl --endpoints=localhost:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key snapshot save /tmp/etcbackup.db
+  335  sudo etcdctl --write-out=table snapshot status /tmp/etcbackup.db
+  336  cp /tmp/etcbackup.db etcdbackup2.db
+  337  sudo cp /tmp/etcbackup.db /tmp/etcdbackup2.db
+  338  history
+  339  kubectl get deploy
+  340  kubectl delete deployments.apps nginx-1784039262 
+  341  kubectl delete deployments.apps highprio 
+  342  cd /etc/kubernetes/manifests/
+  343  sudo mv *.yaml ..
+  344  sleep 60
+  345  sudo cricrtl ps
+  346  sudo crictl ps
+  347  sudo mv /var/lib/etcd /var/lib/etcd-old
+  348  sudo etcdctl snapshot restore /tmp/etcdbackup2.db --data-dir /var/lib/etcd
+  349  sudo ls -l /var/lib/etcd
+  350  sudo ls -l /var/lib/etcd/member
+  351  sudo mv ../*.yaml .
+  352  sudo crictl ps
+  353  kubectl get deploy
+  354  sudo crictl ps
+  355  sudo crictl logs kube-apiserver
+  356  sudo crictl logs 94da
+  357  sudo reboot
+  358  cat /etc/os-release 
+  359  ssh 192.168.29.152
+  360  kubectl get all
+  361  sudo crictl ps
+  362  sudo crictl ps
+  363  sudo crictl ps -a
+  364  sudo crictl ps -a | grep etcd
+  365  sudo crictl logs 61ee
+  366  sudo -i
+  367  sudo crictl ps
+  368  sudo crictl ps
+  369  sleep 30
+  370  sudo crictl ps
+  371  sudo reboot
+  372  kubectl get all
+  373  kubectl get nodes
+  374  free -m
+  375  less /etc/apt/sources.list.d/kubernetes.list
+  376  sudo vim /etc/apt/sources.list.d/kubernetes.list
+  377  sudo apt update
+  378  sudo apt-cache madison kubeadm
+  379  sudo apt-mark unhold kubeadm && sudo apt-get update && sudo apt-get install -y kubeadm='1.36.2-*' && sudo apt-mark hold kubeadm
+  380  kubeadm version
+  381  sudo kubeadm upgrade plan
+  382  sudo kubeadm upgrade apply v1.36.2
+  383  kubectl drain int405 --ignore-daemonsets
+  384  sudo apt-mark unhold kubelet kubectl && sudo apt-get update && sudo apt-get install -y kubelet='1.36.2-*' kubectl='1.36.2-*' && sudo apt-mark hold kubelet kubectl
+  385  kubectl uncordon int405
+  386  kubectl get nodes
+  387  history
+  388  kubectl drain int602 --ignore-daemonsets
+  389  kubectl uncordon int602
+  390  kubectl get nodes
+  391  kubectl label nodes int602 disktype=ssd
+  392  cd cka
+  393  ls
+  394  vim selector-pod.yaml 
+  395  kubectl apply -f selector-pod.yaml 
+  396  kubectl get pods | grep nginx
+  397  kubectl delete pods --all
+  398  kubectl apply -f selector-pod.yaml 
+  399  kubectl get pods
+  400  kubectl describe pod nginx
+  401  kubectl delete pod nginx
+  402  vim selector-pod.yaml 
+  403  kubectl apply -f selector-pod.yaml 
+  404  kubectl get pods -o wide 
+  405  history
+  406* kubectl delete deploy --al
+  407  kubectl get pods
+  408  kubectl get pods -o wide
+  409  kubectl run testing1 --image=nginx
+  410  kubectl get pods -o wide
+  411  kubectl run testing2 --image=nginx
+  412  kubectl run testing3 --image=nginx
+  413  kubectl get pods -o wide
+  414  kubectl get nodes
+  415  sudo apt-mark unhold kubeadm && sudo apt-get update && sudo apt-get install -y kubeadm='1.36.2-*' && sudo apt-mark hold kubeadm
+  416  sudo kubeadm upgrade node
+  417  kubectl drain int610 --ignore-daemonsets
+  418  kubectl drain int610 --ignore-daemonsets --force 
+  419  kubectl drain int610 --ignore-daemonsets --force --delete-emptydir-data
+  420  sudo apt-mark unhold kubelet kubectl && sudo apt-get update && sudo apt-get install -y kubelet='1.36.2-*' kubectl='1.36.2-*' && sudo apt-mark hold kubelet kubectl
+  421  sudo systemctl daemon-reload
+  422  sudo systemctl restart kubelet
+  423  kubectl uncordon int610
+  424  kubectl get nodes
+  425  kubectl run testing4 --image=nginx
+  426  kubectl get pods -o wide
+  427  kubectl drain int610 --force --ignore-daemonsets
+  428  kubectl get pods -o wide
+  429  vim pod-with-node-a
+  430  vim pod-with-node-affinity.yaml 
+  431  vim pod-with-pod-affinity.yaml 
+  432  vim redis-with-pod-affinity.yaml 
+  433  kubectl apply -f redis-with-pod-affinity.yaml 
+  434  kubectl get all
+  435  kubectl get all | grep redis
+  436  kubectl get nodes
+  437  kubectl uncordon int610
+  438  kubectl get nodes
+  439  kubectl get all | grep redis
+  440  vim web-with-pod-affinity.yaml 
+  441  kubectl apply -f web-with-pod-affinity.yaml 
+  442  kubectl get pods 
+  443  history
+  444  kubectl get nodes int405 -o yaml | less
+  445  kubectl get pods -A -o wide | grep 405
+  446  kubectl edit ds calico-node -n kube-system
+  447  kubectl get nodes
+  448  kubectl describe node int602
+  449  kubectl describe node int602 | less
+  450  kubectl taint node int602 storage=ssd:NoSchedule
+  451  kubectl describe node int602 | less
+  452  kubectl edit node int602 
+  453  kubectl create deploy nginx-taint --image=nginx
+  454  kubectl scale deploy nginx-taint --replicas=3
+  455  kubectl get all -o wide | grep taint
+  456  vim taint-toleration.yaml 
+  457  kubectl apply -f taint-toleration.yaml 
+  458  kubectl get pods -o wide
+  459  vim taint-toleration2.yaml 
+  460  kubectl apply -f taint-toleration2.yaml 
+  461  kubectl get pods -o wide | grep hdd
+  462  history
+  463  kubectl get crds
+  464  kubectl get ippools -A -o yaml
+  465  kubectl get pods -o wide
+  466  ps aux | grep service-cluster-ip-range
+  467  ps aux | grep 172.17
+  468  kubectl kustomize https://github.com/nginxinc/nginx-gateway-fabric/config/crd/gateway-api/standard?ref=v2.6.6 | kubectl apply -f -
+  469  helm install ngf oci://ghcr.io/nginxinc/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway --set service.type=NodePort
+  470  kubectl get pods,svc -n nginx-gateway 
+  471  kubectl edit -n nginx-gateway svc ngf-nginx-gateway-fabric 
+  472  kubectl create deploy nginxgw --image=nginx --replicas=3
+  473  kubectl expose deploy nginxgw --port=80
+  474  vim http-routing.yaml 
+  475  kubectl apply -f http-routing.yaml 
+  476  sudo vim /etc/hosts
+  477  sudo vim /etc/hosts
+  478  kubectl get svc -n nginx-gateway 
+  479  curl whatever.com:32080
+  480  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=whatever.com"
+  481  kubectl create secret tls gateway-tls --cert=tls.crt --key=tls.key
+  482  vim tls-gateway.yaml 
+  483  vim https-routing.yaml 
+  484  kubectl apply -f tls-gateway.yaml 
+  485  kubectl delete -f tls-gateway.yaml 
+  486  kubectl apply -f tls-gateway.yaml 
+  487  kubectl apply -f https-routing.yaml 
+  488  sudo apt install socat
+  489  sudo socat TCP4-LISTEN:80,fork TCP4:127.0.0.1:32080 &
+  490  sudo socat TCP4-LISTEN:443,fork TCP4:127.0.0.1:32443 &
+  491  curl -k https://whatever.com
+  492  history
+  493  kubectl describe svc nginxgw 
+  494  history > /tmp/july2026
